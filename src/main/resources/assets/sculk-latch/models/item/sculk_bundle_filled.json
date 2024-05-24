@@ -1,0 +1,6 @@
+{
+    "parent": "sculk-latch:item/sculk_bundle",
+    "textures": {
+        "layer0": "sculk-latch:item/sculk_bundle_filled"
+    }
+}

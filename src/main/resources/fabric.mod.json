@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "sculk-latch",
+	"version": "${version}",
+	"name": "sculk latch",
+	"description": "This adds the sculk latch concepts and other sculk related concepts form Blockixel",
+	"authors": [
+		"Herr Chaos",
+		"Ruby"
+	],
+	"contact": {
+		"homepage": "https://discord.gg/jufZucSF24",
+		"sources": ""
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/sculk-latch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"chaos.sculklatch.SculkLatch"
+		]
+	},
+	"mixins": [
+		"sculk-latch.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.7",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
