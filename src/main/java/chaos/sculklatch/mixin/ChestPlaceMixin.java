@@ -24,7 +24,7 @@ public class ChestPlaceMixin {
 
     @Shadow @Final public static BooleanProperty WATERLOGGED;
 
-    @Inject(at = @At("HEAD"), method = "onPlaced", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "onPlaced")
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack, CallbackInfo ci) {
         if (world.getBlockState(pos.down()).getBlock() == Blocks.SCULK_CATALYST) {
             world.setBlockState(pos, ModBlocks.SCULK_CHEST.getDefaultState()

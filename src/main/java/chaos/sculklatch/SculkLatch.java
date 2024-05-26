@@ -5,7 +5,6 @@ import chaos.sculklatch.blocks.ModBlocks;
 import chaos.sculklatch.commands.ModCommands;
 import chaos.sculklatch.items.ModItems;
 import net.fabricmc.api.ModInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

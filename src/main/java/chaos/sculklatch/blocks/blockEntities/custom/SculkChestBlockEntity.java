@@ -2,15 +2,12 @@ package chaos.sculklatch.blocks.blockEntities.custom;
 
 import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
-import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.AmethystBellItem;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.*;
+import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.entity.ChestLidAnimator;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
