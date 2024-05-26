@@ -30,7 +30,6 @@ public class ChestPlaceMixin {
             world.setBlockState(pos, ModBlocks.SCULK_CHEST.getDefaultState()
                     .with(SculkChestBlock.FACING, state.get(FACING))
                     .with(SculkChestBlock.WATERLOGGED, state.get(WATERLOGGED)));
-            world.scheduleBlockTick(pos, world.getBlockState(pos).getBlock(), 10);
         }
     }
 }

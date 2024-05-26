@@ -1,6 +1,7 @@
 package chaos.sculklatch.items.custom;
 
 import chaos.sculklatch.GameEvent.ModGameEvents;
+import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.blocks.ModBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -24,7 +25,7 @@ public class AmethystBellItem extends Item {
             world.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.PLAYERS, 1F, 0.9F);
             //world.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_BELL_RESONATE, SoundCategory.PLAYERS, 1F, 0.9F);
             world.emitGameEvent(ModGameEvents.AMETHYST_BELL_HIT, user.getPos(), new GameEvent.Emitter(user, ModBlocks.SCULK_CHEST.getDefaultState()));
-            user.getItemCooldownManager().set(this, 50);
+            user.getItemCooldownManager().set(this, SculkLatch.AMETHYST_BELL_COOLDOWN);
             return TypedActionResult.success(user.getStackInHand(hand));
         }
         return super.use(world, user, hand);

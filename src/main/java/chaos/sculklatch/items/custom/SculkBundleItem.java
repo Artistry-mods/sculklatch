@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class SculkBundleItem extends BundleItem {
-    private static final String ITEMS_KEY = "OverFilledItems";
+    private static final String OVERFILLED_ITEMS_KEY = "OverFilledItems";
     private static final int MAX_OVER_FILL_STORAGE = 64 * 10;
 
     public SculkBundleItem(Settings settings) {
@@ -31,12 +31,8 @@ public class SculkBundleItem extends BundleItem {
     }
 
     private void RegisterModelPredicate() {
-        ModelPredicateProviderRegistry.register(new Identifier("filled"), (itemStack, clientWorld, livingEntity, i) -> {
-            return SculkBundleItem.getAmountFilled(itemStack);
-        });
-        ModelPredicateProviderRegistry.register(new Identifier("over_filled"), (itemStack, clientWorld, livingEntity, i) -> {
-            return SculkBundleItem.getAmountOverFilled(itemStack);
-        });
+        ModelPredicateProviderRegistry.register(new Identifier("filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountFilled(itemStack));
+        ModelPredicateProviderRegistry.register(new Identifier("over_filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountOverFilled(itemStack));
     }
     public static float getAmountOverFilled(ItemStack stack) {
         return (float)getOverFillBundleOccupancy(stack) / MAX_OVER_FILL_STORAGE;
@@ -49,7 +45,7 @@ public class SculkBundleItem extends BundleItem {
         if (nbtCompound == null) {
             return Stream.empty();
         }
-        NbtList nbtList = nbtCompound.getList(ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+        NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
         return nbtList.stream().map(NbtCompound.class::cast).map(ItemStack::fromNbt);
     }
     private static Optional<NbtCompound> canMergeStack(NbtList items) {
@@ -60,8 +56,8 @@ public class SculkBundleItem extends BundleItem {
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         NbtCompound nbtCompound = stack.getOrCreateNbt();
-        if (nbtCompound.contains(ITEMS_KEY)) {
-            NbtList nbtList = nbtCompound.getList(ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+        if (nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
+            NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
             if (!nbtList.isEmpty()) {
                 removeFirstStack(stack).ifPresent(removedStack -> {
                     int firstEmptySlot = ((PlayerEntity)entity).getInventory().getEmptySlot();
@@ -75,10 +71,10 @@ public class SculkBundleItem extends BundleItem {
 
     private static Optional<ItemStack> removeFirstStack(ItemStack stack) {
         NbtCompound nbtCompound = stack.getOrCreateNbt();
-        if (!nbtCompound.contains(ITEMS_KEY)) {
+        if (!nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
             return Optional.empty();
         }
-        NbtList nbtList = nbtCompound.getList(ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+        NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
         if (nbtList.isEmpty()) {
             return Optional.empty();
         }
@@ -86,7 +82,7 @@ public class SculkBundleItem extends BundleItem {
         ItemStack itemStack = ItemStack.fromNbt(nbtCompound2);
         nbtList.remove(0);
         if (nbtList.isEmpty()) {
-            stack.removeSubNbt(ITEMS_KEY);
+            stack.removeSubNbt(OVERFILLED_ITEMS_KEY);
         }
         return Optional.of(itemStack);
     }
@@ -111,8 +107,8 @@ public class SculkBundleItem extends BundleItem {
             return 0;
         }
         NbtCompound nbtCompound = bundle.getOrCreateNbt();
-        if (!nbtCompound.contains(ITEMS_KEY)) {
-            nbtCompound.put(ITEMS_KEY, new NbtList());
+        if (!nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
+            nbtCompound.put(OVERFILLED_ITEMS_KEY, new NbtList());
         }
         int i = SculkBundleItem.getOverFillBundleOccupancy(bundle);
         int j = SculkBundleItem.getOverFillItemOccupancy(stack);
@@ -120,7 +116,7 @@ public class SculkBundleItem extends BundleItem {
         if (k == 0) {
             return 0;
         }
-        NbtList nbtList = nbtCompound.getList(ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+        NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
         Optional<NbtCompound> optional = SculkBundleItem.canMergeStack(nbtList);
         if (optional.isPresent()) {
             NbtCompound nbtCompound2 = optional.get();

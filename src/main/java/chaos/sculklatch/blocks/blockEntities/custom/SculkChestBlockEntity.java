@@ -1,5 +1,6 @@
 package chaos.sculklatch.blocks.blockEntities.custom;
 
+import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
 import chaos.sculklatch.items.custom.AmethystBellItem;
@@ -77,7 +78,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
 
 
     protected class VibrationCallback implements Vibrations.Callback {
-        public static final int RANGE = 4;
+        public static final int RANGE = SculkLatch.SCULK_CHEST_RANGE;
         protected final BlockPos pos;
         private final PositionSource positionSource;
 
@@ -101,7 +102,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
                         if (!SculkChestBlockEntity.this.hasCustomName()) {
                             world.setBlockState(this.pos, world.getBlockState(this.pos).with(SculkChestBlock.IS_SCARED, true));
                             world.playSound(null, this.pos, SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK, SoundCategory.BLOCKS, 1F, 1.2F);
-                            SculkChestBlockEntity.this.scaredTimer = 40;
+                            SculkChestBlockEntity.this.scaredTimer = SculkLatch.SCARED_TIMER;
                             return (!pos.equals(this.pos) || event != GameEvent.BLOCK_DESTROY && event != GameEvent.BLOCK_PLACE);
                         }
                         if (Objects.equals(Objects.requireNonNull(SculkChestBlockEntity.this.getCustomName()).getString(), itemStack.getName().getString())) {
