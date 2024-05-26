@@ -2,7 +2,6 @@ package chaos.sculklatch;
 
 import chaos.sculklatch.GameEvent.ModGameEvents;
 import chaos.sculklatch.blocks.ModBlocks;
-import chaos.sculklatch.blocks.custom.SculkChestBlock;
 import chaos.sculklatch.commands.ModCommands;
 import chaos.sculklatch.items.ModItems;
 import net.fabricmc.api.ModInitializer;
