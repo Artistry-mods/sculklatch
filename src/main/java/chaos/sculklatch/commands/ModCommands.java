@@ -4,12 +4,9 @@ import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.SculkBundleItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
@@ -43,29 +40,6 @@ public class ModCommands {
         serverCommandSourceCommandDispatcher.register(autoOverFill);
     }
 
-    /*
-    private static void addCommands(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandRegistryAccess commandBuildContext) {
-        LiteralArgumentBuilder<FabricClientCommandSource> overFill = literal("test-over-fill");
-        LiteralArgumentBuilder<FabricClientCommandSource> autoOverFill = literal("test-auto-over-fill");
-
-        overFill.executes(context -> {
-            if (context.getSource().getPlayer().getMainHandStack().getItem() instanceof SculkBundleItem) {
-                SculkBundleItem.overFillBundle(context.getSource().getPlayer().getMainHandStack(), context.getSource().getPlayer().getOffHandStack());
-            }
-            return 1;
-        });
-
-        autoOverFill.executes(context -> {
-            fillSculkBundles(context.getSource().getPlayer());
-            return 1;
-        });
-
-        fabricClientCommandSourceCommandDispatcher.register(overFill);
-        fabricClientCommandSourceCommandDispatcher.register(autoOverFill);
-    }
-
-
-     */
     private static Vec<Integer> getSculkBundles(Inventory inventory) {
         Vec<Integer> slots = new Vec<>();
         for(int j = 0; j < inventory.size(); ++j) {

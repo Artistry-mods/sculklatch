@@ -1,11 +1,11 @@
 package chaos.sculklatch;
 
+import chaos.sculklatch.GameEvent.ModGameEvents;
 import chaos.sculklatch.blocks.ModBlocks;
 import chaos.sculklatch.commands.ModCommands;
 import chaos.sculklatch.items.ModItems;
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +18,7 @@ public class SculkLatch implements ModInitializer {
 		ModItems.registerModItems();
 		ModBlocks.registerModItems();
 		ModCommands.registerModCommands();
+		ModGameEvents.registerModGameEvents();
 
 		LOGGER.info("Hello Sculky world");
 	}

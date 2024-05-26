@@ -18,6 +18,9 @@
 	"entrypoints": {
 		"main": [
 			"chaos.sculklatch.SculkLatch"
+		],
+		"client": [
+			"chaos.sculklatch.SculkLatchClient"
 		]
 	},
 	"mixins": [

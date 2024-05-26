@@ -35,8 +35,13 @@ public class SculkBundleItem extends BundleItem {
         ModelPredicateProviderRegistry.register(new Identifier("filled"), (itemStack, clientWorld, livingEntity, i) -> {
             return SculkBundleItem.getAmountFilled(itemStack);
         });
+        ModelPredicateProviderRegistry.register(new Identifier("over_filled"), (itemStack, clientWorld, livingEntity, i) -> {
+            return SculkBundleItem.getAmountOverFilled(itemStack);
+        });
     }
-
+    public static float getAmountOverFilled(ItemStack stack) {
+        return (float)getOverFillBundleOccupancy(stack) / MAX_OVER_FILL_STORAGE;
+    }
     public static int getOverFillBundleOccupancy(ItemStack stack) {
         return SculkBundleItem.getBundledStacks(stack).mapToInt(itemStack -> SculkBundleItem.getOverFillItemOccupancy(itemStack) * itemStack.getCount()).sum();
     }
