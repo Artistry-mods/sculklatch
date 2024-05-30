@@ -19,13 +19,7 @@ public class SculkLatch implements ModInitializer {
 	public static final int SCULK_CHEST_RANGE = 8; //The distance the chest can get stunned from
 	public static final SpriteIdentifier FULLY_SCULKED_CHEST_TEXTURE = new SpriteIdentifier(new Identifier("textures/atlas/chest.png"), new Identifier("sculk-latch","entity/chest/sculk_chest_full_sculked"));
 	public static final SpriteIdentifier SCARED_SCULKED_CHEST_TEXTURE = new  SpriteIdentifier(new Identifier("textures/atlas/chest.png"), new Identifier("sculk-latch","entity/chest/sculk_chest_scared_sculked"));
-
-	/*
-	SpriteIdentifier spriteIdentifier = new SpriteIdentifier(new Identifier("textures/atlas/chest.png"), new Identifier("sculk-latch","entity/chest/sculk_chest_full_sculked"));
-            if (!entity.getWorld().getBlockState(entity.getPos()).isAir() && entity.getWorld().getBlockState(entity.getPos()).get(SculkChestBlock.IS_SCARED)) {
-		spriteIdentifier = new  SpriteIdentifier(new Identifier("textures/atlas/chest.png"), new Identifier("sculk-latch","entity/chest/sculk_chest_scared_sculked"));
-	 */
-
+	
 	@Override
 	public void onInitialize() {
 		ModItems.registerModItems();
