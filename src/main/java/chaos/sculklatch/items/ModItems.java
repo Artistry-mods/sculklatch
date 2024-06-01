@@ -11,13 +11,14 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 
 public class ModItems {
     public static final Item SCULK_LATCH = registerItem("sculk_latch",
             new Item(new FabricItemSettings().maxCount(16)));
 
     public static final Item SCULK_BUNDLE = registerItem("sculk_bundle",
-            new SculkBundleItem(new FabricItemSettings().maxCount(1).fireproof()));
+            new SculkBundleItem(new FabricItemSettings().maxCount(1).fireproof().rarity(Rarity.EPIC)));
 
     public static final Item AMETHYST_BELL = registerItem("amethyst_bell",
             new AmethystBellItem(new FabricItemSettings().maxCount(1)));
