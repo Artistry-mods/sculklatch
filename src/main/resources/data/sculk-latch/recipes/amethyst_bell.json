@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:bell"
+    },
+    "W": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    " W ",
+    "W#W",
+    " W "
+  ],
+  "result": {
+    "item": "sculk-latch:amethyst_bell"
+  },
+  "show_notification": true
+}

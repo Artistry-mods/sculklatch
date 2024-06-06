@@ -54,15 +54,6 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     @Override
-    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
-        System.out.println("step on me mommy");
-        if (entity instanceof LivingEntity && !state.get(IS_SCARED)) {
-            //entity.addVelocity(0, -0.5, 0);
-        }
-        super.onSteppedOn(world, pos, state, entity);
-    }
-
-    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         if (state.get(IS_SCARED)) {
             return VoxelShapes.fullCube();
