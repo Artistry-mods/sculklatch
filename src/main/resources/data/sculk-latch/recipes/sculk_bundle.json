@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "sculk-latch:sculk_latch"
+    },
+    {
+      "item": "minecraft:bundle"
+    }
+  ],
+  "result": {
+    "item": "sculk-latch:sculk_bundle"
+  }
+}

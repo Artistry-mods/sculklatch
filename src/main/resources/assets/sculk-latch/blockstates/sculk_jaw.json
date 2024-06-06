@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "facing=east,is_scared=true": {
+      "model": "sculk-latch:block/sculk_jaw"
+    },
+    "facing=north,is_scared=true": {
+      "model": "sculk-latch:block/sculk_jaw",
+      "y": 270
+    },
+    "facing=south,is_scared=true": {
+      "model": "sculk-latch:block/sculk_jaw",
+      "y": 90
+    },
+    "facing=west,is_scared=true": {
+      "model": "sculk-latch:block/sculk_jaw",
+      "y": 180
+    },
+
+
+    "facing=east,is_scared=false": {
+      "model": "sculk-latch:block/sculk_jaw_scared"
+    },
+    "facing=north,is_scared=false": {
+      "model": "sculk-latch:block/sculk_jaw_scared",
+      "y": 270
+    },
+    "facing=south,is_scared=false": {
+      "model": "sculk-latch:block/sculk_jaw_scared",
+      "y": 90
+    },
+    "facing=west,is_scared=false": {
+      "model": "sculk-latch:block/sculk_jaw_scared",
+      "y": 180
+    }
+  }
+}
+

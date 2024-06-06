@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BundleItem;
@@ -55,16 +56,22 @@ public class SculkBundleItem extends BundleItem {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
-        if (nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
-            NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
-            if (!nbtList.isEmpty()) {
-                removeFirstStack(stack).ifPresent(removedStack -> {
-                    int firstEmptySlot = ((PlayerEntity)entity).getInventory().getEmptySlot();
-                    if (firstEmptySlot != -1) {
-                        ((PlayerEntity) entity).getInventory().setStack(firstEmptySlot, removedStack);
-                    }
-                });
+        if (!world.isClient) {
+            NbtCompound nbtCompound = stack.getOrCreateNbt();
+            if (nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
+                NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+                if (!nbtList.isEmpty()) {
+                    removeFirstStack(stack).ifPresent(removedStack -> {
+                        int firstEmptySlot = ((PlayerEntity) entity).getInventory().getEmptySlot();
+                        if (firstEmptySlot != -1) {
+                            ((PlayerEntity) entity).getInventory().setStack(firstEmptySlot, removedStack);
+                        } else {
+                            ItemEntity itemEntity = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), removedStack);
+                            world.spawnEntity(itemEntity);
+                            //((PlayerEntity) entity).dropItem(removedStack, true);
+                        }
+                    });
+                }
             }
         }
     }

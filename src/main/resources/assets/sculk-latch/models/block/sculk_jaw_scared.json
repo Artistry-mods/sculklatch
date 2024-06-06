@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable_with_bottom",
+  "textures": {
+    "front": "sculk-latch:block/sculk_jaw_side",
+    "side": "sculk-latch:block/sculk_jaw_side",
+    "top": "sculk-latch:block/sculk_jaw_with_teeth",
+    "bottom": "sculk-latch:block/sculk_jaw_side"
+  }
+}
