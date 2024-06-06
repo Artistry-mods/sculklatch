@@ -23,7 +23,7 @@ public abstract class SculkSpreadJawMixin {
     @Shadow
     protected abstract boolean canGenerate(WorldAccess world, BlockPos pos);
 
-    @Inject(at = @At("RETURN"), method = "generate", cancellable = true)
+    @Inject(at = @At("RETURN"), method = "generate")
     public void generate(FeatureContext<SculkPatchFeatureConfig> context, CallbackInfoReturnable<Boolean> cir) {
 
         BlockPos blockPos = context.getOrigin();

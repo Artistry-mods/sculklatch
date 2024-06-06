@@ -27,7 +27,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
     private final Vibrations.Callback callback;
     private final Vibrations.VibrationListener listener;
     private final ChestLidAnimator lidAnimator;
-    private Vibrations.ListenerData listenerData;
+    private final Vibrations.ListenerData listenerData;
     private int scaredTimer = 0;
 
     public SculkChestBlockEntity(BlockPos pos, BlockState state) {

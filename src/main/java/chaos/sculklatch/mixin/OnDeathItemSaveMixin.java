@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayerEntity.class)
 public class OnDeathItemSaveMixin {
 
+    @Unique
     private static Vec<Integer> getSculkBundles(Inventory inventory) {
         Vec<Integer> slots = new Vec<>();
         for (int j = 0; j < inventory.size(); ++j) {
@@ -27,6 +29,7 @@ public class OnDeathItemSaveMixin {
         return slots;
     }
 
+    @Unique
     private static void fillSculkBundles(ServerPlayerEntity player) {
         int sculk_bundles = player.getInventory().count(ModItems.SCULK_BUNDLE);
         if (sculk_bundles != 0) {
@@ -42,7 +45,7 @@ public class OnDeathItemSaveMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "onDeath", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "onDeath")
     public void onDeath(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayerEntity entity = (ServerPlayerEntity) (Object) this;
         if (!entity.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {

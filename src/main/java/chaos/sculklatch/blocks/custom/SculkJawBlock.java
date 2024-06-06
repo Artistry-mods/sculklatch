@@ -117,7 +117,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
             if (bl4) {
                 float l = 1.0F + EnchantmentHelper.getSweepingMultiplier(player) * f;
 
-                player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+                player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
                 player.spawnSweepAttackParticles();
 
 
@@ -128,17 +128,17 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
 
             if (bl3) {
                 player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
+                player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
             }
 
             if (!bl3 && !bl4) {
                 player.getWorld().emitGameEvent(GameEvent.ENTITY_DAMAGE, pos, new GameEvent.Emitter(player, null));
                 if (bl) {
                     player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                    player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
+                    player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
                 } else {
                     player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                    player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
+                    player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
                 }
             }
 
