@@ -15,10 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemEntity.class)
 public abstract class NoSculkBundleDespawnMixin {
-    ///data get entity @e[limit=1, type=!minecraft:player, sort=nearest]
-    @Shadow public abstract ItemStack getStack();
+    @Shadow
+    private int itemAge;
 
-    @Shadow private int itemAge;
+    ///data get entity @e[limit=1, type=!minecraft:player, sort=nearest]
+    @Shadow
+    public abstract ItemStack getStack();
 
     @Inject(at = @At("HEAD"), method = "tick")
     public void onPlaced(CallbackInfo ci) {

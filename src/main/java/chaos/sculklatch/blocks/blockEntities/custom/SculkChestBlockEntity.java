@@ -26,9 +26,10 @@ import java.util.Objects;
 public class SculkChestBlockEntity extends ChestBlockEntity implements GameEventListener.Holder<Vibrations.VibrationListener>, Vibrations {
     private final Vibrations.Callback callback;
     private final Vibrations.VibrationListener listener;
+    private final ChestLidAnimator lidAnimator;
     private Vibrations.ListenerData listenerData;
     private int scaredTimer = 0;
-    private final ChestLidAnimator lidAnimator;
+
     public SculkChestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SCULK_CHEST_BLOCK_ENTITY_TYPE, pos, state);
         this.callback = this.createCallback();
@@ -36,6 +37,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
         this.listener = new Vibrations.VibrationListener(this);
         this.lidAnimator = new ChestLidAnimator();
     }
+
     public static void tick(World world, BlockPos blockPos, BlockState blockState, SculkChestBlockEntity sculkChestBlockEntity) {
         sculkChestBlockEntity.lidAnimator.step();
         if (!blockState.isAir()) {
@@ -47,6 +49,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
             }
         }
     }
+
     @Override
     public boolean onSyncedBlockEvent(int type, int data) {
         if (type == 1) {
@@ -61,17 +64,21 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
     public float getAnimationProgress(float tickDelta) {
         return this.lidAnimator.getProgress(tickDelta);
     }
+
     public Vibrations.Callback createCallback() {
         return new VibrationCallback(this.pos);
     }
+
     @Override
     public Vibrations.VibrationListener getEventListener() {
         return this.listener;
     }
+
     @Override
     public Vibrations.ListenerData getVibrationListenerData() {
         return this.listenerData;
     }
+
     public Vibrations.Callback getVibrationCallback() {
         return this.callback;
     }
@@ -86,18 +93,22 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
             this.pos = pos;
             this.positionSource = new BlockPositionSource(pos);
         }
+
         public int getRange() {
             return RANGE;
         }
+
         public PositionSource getPositionSource() {
             return this.positionSource;
         }
+
         public boolean triggersAvoidCriterion() {
             return true;
         }
+
         public boolean accepts(ServerWorld world, BlockPos pos, GameEvent event, @Nullable GameEvent.Emitter emitter) {
             if (Objects.equals(event.getId(), "amethyst_bell_hit") && emitter != null && emitter.sourceEntity() != null) {
-                for (ItemStack itemStack: emitter.sourceEntity().getHandItems()) {
+                for (ItemStack itemStack : emitter.sourceEntity().getHandItems()) {
                     if (itemStack.getItem() instanceof AmethystBellItem) {
                         if (!SculkChestBlockEntity.this.hasCustomName()) {
                             world.setBlockState(this.pos, world.getBlockState(this.pos).with(SculkChestBlock.IS_SCARED, true));
@@ -124,6 +135,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
         public void onListen() {
             SculkChestBlockEntity.this.markDirty();
         }
+
         public boolean requiresTickingChunksAround() {
             return true;
         }

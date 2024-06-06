@@ -15,8 +15,6 @@
       "model": "sculk-latch:block/sculk_jaw",
       "y": 180
     },
-
-
     "facing=east,is_scared=false": {
       "model": "sculk-latch:block/sculk_jaw_scared"
     },

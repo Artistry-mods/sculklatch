@@ -1,23 +1,19 @@
 package chaos.sculklatch.blocks.custom;
 
-import chaos.sculklatch.blocks.ModBlocks;
 import chaos.sculklatch.damageType.ModDamageSources;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -51,6 +47,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
         builder.add(IS_SCARED);
         builder.add(HEALTH);
     }
+
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
@@ -91,66 +88,66 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     public void damageSculkJaw(PlayerEntity player, BlockPos pos, BlockState state) {
-                float f = (float)player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-                float g;
-                g = EnchantmentHelper.getAttackDamage(player.getMainHandStack(), EntityGroup.UNDEAD);
-                float h = player.getAttackCooldownProgress(0.5F);
-                f *= 0.2F + h * h * 0.8F;
-                g *= h;
-                player.resetLastAttackedTicks();
-                if (f > 0.0F || g > 0.0F) {
-                    boolean bl = h > 0.9F;
-                    boolean bl2 = player.isSprinting() && bl;
-                    boolean bl3 = bl && player.fallDistance > 0.0F && !player.isOnGround() && !player.isClimbing() && !player.isTouchingWater() && !player.hasStatusEffect(StatusEffects.BLINDNESS) && !player.hasVehicle();
-                    bl3 = bl3 && !player.isSprinting();
-                    if (bl3) {
-                        f *= 1.5F;
-                    }
+        float f = (float) player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        float g;
+        g = EnchantmentHelper.getAttackDamage(player.getMainHandStack(), EntityGroup.UNDEAD);
+        float h = player.getAttackCooldownProgress(0.5F);
+        f *= 0.2F + h * h * 0.8F;
+        g *= h;
+        player.resetLastAttackedTicks();
+        if (f > 0.0F || g > 0.0F) {
+            boolean bl = h > 0.9F;
+            boolean bl2 = player.isSprinting() && bl;
+            boolean bl3 = bl && player.fallDistance > 0.0F && !player.isOnGround() && !player.isClimbing() && !player.isTouchingWater() && !player.hasStatusEffect(StatusEffects.BLINDNESS) && !player.hasVehicle();
+            bl3 = bl3 && !player.isSprinting();
+            if (bl3) {
+                f *= 1.5F;
+            }
 
-                    f += g;
-                    boolean bl4 = false;
-                    double d = (double) (player.horizontalSpeed - player.prevHorizontalSpeed);
-                    if (bl && !bl3 && !bl2 && player.isOnGround() && d < (double) player.getMovementSpeed()) {
-                        ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-                        if (itemStack.getItem() instanceof SwordItem) {
-                            bl4 = true;
-                        }
-                    }
-
-                    if (bl4) {
-                        float l = 1.0F + EnchantmentHelper.getSweepingMultiplier(player) * f;
-
-                        player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
-                        player.spawnSweepAttackParticles();
-
-
-                        if (player.squaredDistanceTo(pos.toCenterPos()) < 9.0) {
-                            player.getWorld().setBlockState(pos, state.with(HEALTH,Math.max(0, state.get(HEALTH) - ((int) l * 5))));
-                        }
-                    }
-
-                    if (bl3) {
-                        player.getWorld().setBlockState(pos, state.with(HEALTH,Math.max(0, state.get(HEALTH) - ((int) f))));
-                        player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
-                    }
-
-                    if (!bl3 && !bl4) {
-                        player.getWorld().emitGameEvent(GameEvent.ENTITY_DAMAGE, pos, new GameEvent.Emitter(player, null));
-                        if (bl) {
-                            player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                            player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
-                        } else {
-                            player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                            player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
-                        }
-                    }
-
-                    if (!player.getWorld().isClient) {
-                        ((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, pos.getX(), pos.getY(), pos.getZ(), 5, 0.1, 0.0, 0.1, 0.2);
-                    }
-
-                    player.addExhaustion(0.1F);
+            f += g;
+            boolean bl4 = false;
+            double d = player.horizontalSpeed - player.prevHorizontalSpeed;
+            if (bl && !bl3 && !bl2 && player.isOnGround() && d < (double) player.getMovementSpeed()) {
+                ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
+                if (itemStack.getItem() instanceof SwordItem) {
+                    bl4 = true;
                 }
+            }
+
+            if (bl4) {
+                float l = 1.0F + EnchantmentHelper.getSweepingMultiplier(player) * f;
+
+                player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+                player.spawnSweepAttackParticles();
+
+
+                if (player.squaredDistanceTo(pos.toCenterPos()) < 9.0) {
+                    player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) l * 5))));
+                }
+            }
+
+            if (bl3) {
+                player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
+                player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
+            }
+
+            if (!bl3 && !bl4) {
+                player.getWorld().emitGameEvent(GameEvent.ENTITY_DAMAGE, pos, new GameEvent.Emitter(player, null));
+                if (bl) {
+                    player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
+                    player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
+                } else {
+                    player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
+                    player.getWorld().playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
+                }
+            }
+
+            if (!player.getWorld().isClient) {
+                ((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, pos.getX(), pos.getY(), pos.getZ(), 5, 0.1, 0.0, 0.1, 0.2);
+            }
+
+            player.addExhaustion(0.1F);
+        }
     }
 
     @Override

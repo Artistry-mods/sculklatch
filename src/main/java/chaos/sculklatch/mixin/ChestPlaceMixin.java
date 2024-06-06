@@ -20,9 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChestBlock.class)
 public class ChestPlaceMixin {
-    @Shadow @Final public static DirectionProperty FACING;
+    @Shadow
+    @Final
+    public static DirectionProperty FACING;
 
-    @Shadow @Final public static BooleanProperty WATERLOGGED;
+    @Shadow
+    @Final
+    public static BooleanProperty WATERLOGGED;
 
     @Inject(at = @At("HEAD"), method = "onPlaced")
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack, CallbackInfo ci) {

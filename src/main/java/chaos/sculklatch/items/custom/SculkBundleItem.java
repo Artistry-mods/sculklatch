@@ -31,16 +31,14 @@ public class SculkBundleItem extends BundleItem {
         }
     }
 
-    private void RegisterModelPredicate() {
-        ModelPredicateProviderRegistry.register(new Identifier("filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountFilled(itemStack));
-        ModelPredicateProviderRegistry.register(new Identifier("over_filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountOverFilled(itemStack));
-    }
     public static float getAmountOverFilled(ItemStack stack) {
-        return (float)getOverFillBundleOccupancy(stack) / MAX_OVER_FILL_STORAGE;
+        return (float) getOverFillBundleOccupancy(stack) / MAX_OVER_FILL_STORAGE;
     }
+
     public static int getOverFillBundleOccupancy(ItemStack stack) {
         return SculkBundleItem.getBundledStacks(stack).mapToInt(itemStack -> SculkBundleItem.getOverFillItemOccupancy(itemStack) * itemStack.getCount()).sum();
     }
+
     private static Stream<ItemStack> getBundledStacks(ItemStack stack) {
         NbtCompound nbtCompound = stack.getNbt();
         if (nbtCompound == null) {
@@ -49,31 +47,9 @@ public class SculkBundleItem extends BundleItem {
         NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
         return nbtList.stream().map(NbtCompound.class::cast).map(ItemStack::fromNbt);
     }
+
     private static Optional<NbtCompound> canMergeStack(NbtList items) {
         return items.stream().filter(NbtCompound.class::isInstance).map(NbtCompound.class::cast).filter(item -> false).findFirst();
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-        if (!world.isClient) {
-            NbtCompound nbtCompound = stack.getOrCreateNbt();
-            if (nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
-                NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
-                if (!nbtList.isEmpty()) {
-                    removeFirstStack(stack).ifPresent(removedStack -> {
-                        int firstEmptySlot = ((PlayerEntity) entity).getInventory().getEmptySlot();
-                        if (firstEmptySlot != -1) {
-                            ((PlayerEntity) entity).getInventory().setStack(firstEmptySlot, removedStack);
-                        } else {
-                            ItemEntity itemEntity = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), removedStack);
-                            world.spawnEntity(itemEntity);
-                            //((PlayerEntity) entity).dropItem(removedStack, true);
-                        }
-                    });
-                }
-            }
-        }
     }
 
     private static Optional<ItemStack> removeFirstStack(ItemStack stack) {
@@ -139,5 +115,33 @@ public class SculkBundleItem extends BundleItem {
             nbtList.add(0, nbtCompound3);
         }
         return k;
+    }
+
+    private void RegisterModelPredicate() {
+        ModelPredicateProviderRegistry.register(new Identifier("filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountFilled(itemStack));
+        ModelPredicateProviderRegistry.register(new Identifier("over_filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountOverFilled(itemStack));
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
+        if (!world.isClient) {
+            NbtCompound nbtCompound = stack.getOrCreateNbt();
+            if (nbtCompound.contains(OVERFILLED_ITEMS_KEY)) {
+                NbtList nbtList = nbtCompound.getList(OVERFILLED_ITEMS_KEY, NbtElement.COMPOUND_TYPE);
+                if (!nbtList.isEmpty()) {
+                    removeFirstStack(stack).ifPresent(removedStack -> {
+                        int firstEmptySlot = ((PlayerEntity) entity).getInventory().getEmptySlot();
+                        if (firstEmptySlot != -1) {
+                            ((PlayerEntity) entity).getInventory().setStack(firstEmptySlot, removedStack);
+                        } else {
+                            ItemEntity itemEntity = new ItemEntity(world, entity.getX(), entity.getY(), entity.getZ(), removedStack);
+                            world.spawnEntity(itemEntity);
+                            //((PlayerEntity) entity).dropItem(removedStack, true);
+                        }
+                    });
+                }
+            }
+        }
     }
 }

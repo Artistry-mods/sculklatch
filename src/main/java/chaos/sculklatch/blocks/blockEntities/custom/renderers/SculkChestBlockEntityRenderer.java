@@ -23,6 +23,7 @@ public class SculkChestBlockEntityRenderer extends ChestBlockEntityRenderer<Scul
     private final ModelPart singleChestLid;
     private final ModelPart singleChestBase;
     private final ModelPart singleChestLatch;
+
     public SculkChestBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
         super(ctx);
         ModelPart modelPart = ctx.getLayerModelPart(EntityModelLayers.CHEST);
@@ -60,6 +61,7 @@ public class SculkChestBlockEntityRenderer extends ChestBlockEntityRenderer<Scul
             matrices.pop();
         }
     }
+
     private void render(MatrixStack matrices, VertexConsumer vertices, ModelPart lid, ModelPart latch, ModelPart base, float openFactor, int light, int overlay) {
         lid.pitch = -(openFactor * 1.5707964F);
         latch.pitch = lid.pitch;

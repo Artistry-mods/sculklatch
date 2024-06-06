@@ -42,7 +42,7 @@ public class ModCommands {
 
     private static Vec<Integer> getSculkBundles(Inventory inventory) {
         Vec<Integer> slots = new Vec<>();
-        for(int j = 0; j < inventory.size(); ++j) {
+        for (int j = 0; j < inventory.size(); ++j) {
             ItemStack itemStack = inventory.getStack(j);
             if (itemStack.getItem().equals(ModItems.SCULK_BUNDLE)) {
                 slots.push(j);
@@ -57,7 +57,7 @@ public class ModCommands {
             Vec<Integer> sculkBundleSlots = getSculkBundles(player.getInventory());
             for (int i = 0; i < sculkBundleSlots.size(); i++) {
                 ItemStack sculkBundle = player.getInventory().getStack(sculkBundleSlots.get(i));
-                for(int j = 0; j < player.getInventory().size(); ++j) {
+                for (int j = 0; j < player.getInventory().size(); ++j) {
                     ItemStack itemStack = player.getInventory().getStack(j);
                     SculkBundleItem.overFillBundle(sculkBundle, itemStack);
                 }

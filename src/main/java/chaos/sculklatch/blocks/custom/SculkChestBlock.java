@@ -30,6 +30,7 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider {
 
     public static final BooleanProperty IS_SCARED = BooleanProperty.of("is_scared");
     private ServerPlayerEntity lastPlayerToOpen;
+
     public SculkChestBlock(Settings settings, Supplier<BlockEntityType<? extends ChestBlockEntity>> blockEntityTypeSupplier) {
         super(settings, blockEntityTypeSupplier);
         this.setDefaultState(this.stateManager.getDefaultState().with(IS_SCARED, false).with(FACING, Direction.NORTH).with(WATERLOGGED, false));
@@ -54,6 +55,7 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider {
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new SculkChestBlockEntity(pos, state);
     }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         return checkType(type, ModBlockEntities.SCULK_CHEST_BLOCK_ENTITY_TYPE, SculkChestBlockEntity::tick);

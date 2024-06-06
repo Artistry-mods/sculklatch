@@ -16,16 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayerEntity.class)
 public class OnDeathItemSaveMixin {
 
-	@Inject(at = @At("HEAD"), method = "onDeath", cancellable = true)
-    public void onDeath(DamageSource damageSource, CallbackInfo ci) {
-        ServerPlayerEntity entity = (ServerPlayerEntity) (Object) this;
-        if (!entity.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
-            fillSculkBundles(entity);
-        }
-    }
     private static Vec<Integer> getSculkBundles(Inventory inventory) {
         Vec<Integer> slots = new Vec<>();
-        for(int j = 0; j < inventory.size(); ++j) {
+        for (int j = 0; j < inventory.size(); ++j) {
             ItemStack itemStack = inventory.getStack(j);
             if (itemStack.getItem().equals(ModItems.SCULK_BUNDLE)) {
                 slots.push(j);
@@ -40,12 +33,20 @@ public class OnDeathItemSaveMixin {
             Vec<Integer> sculkBundleSlots = getSculkBundles(player.getInventory());
             for (int i = 0; i < sculkBundleSlots.size(); i++) {
                 ItemStack sculkBundle = player.getInventory().getStack(sculkBundleSlots.get(i));
-                for(int j = 0; j < player.getInventory().size(); ++j) {
+                for (int j = 0; j < player.getInventory().size(); ++j) {
                     ItemStack itemStack = player.getInventory().getStack(j);
                     int removedItems = SculkBundleItem.overFillBundle(sculkBundle, itemStack);
                     itemStack.decrement(removedItems);
                 }
             }
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "onDeath", cancellable = true)
+    public void onDeath(DamageSource damageSource, CallbackInfo ci) {
+        ServerPlayerEntity entity = (ServerPlayerEntity) (Object) this;
+        if (!entity.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+            fillSculkBundles(entity);
         }
     }
 }
