@@ -25,7 +25,6 @@ public abstract class SculkSpreadJawMixin {
 
     @Inject(at = @At("RETURN"), method = "generate")
     public void generate(FeatureContext<SculkPatchFeatureConfig> context, CallbackInfoReturnable<Boolean> cir) {
-
         BlockPos blockPos = context.getOrigin();
         StructureWorldAccess structureWorldAccess = context.getWorld();
 
@@ -35,7 +34,6 @@ public abstract class SculkSpreadJawMixin {
                 BlockPos blockPos3 = blockPos.add(random.nextInt(5) - 2, 0, random.nextInt(5) - 2);
                 if (structureWorldAccess.getBlockState(blockPos3).getBlock() instanceof SculkBlock && structureWorldAccess.getBlockState(blockPos3.up()).isAir() && structureWorldAccess.getBlockState(blockPos3.down()).isSideSolidFullSquare(structureWorldAccess, blockPos3.down(), Direction.UP)) {
                     structureWorldAccess.setBlockState(blockPos3, ModBlocks.SCULK_JAW.getDefaultState(), 3);
-                    System.out.println("Placed a jaw at: " + blockPos3);
                     break;
                 }
             }

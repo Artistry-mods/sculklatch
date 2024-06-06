@@ -18,7 +18,6 @@ public abstract class NoSculkBundleDespawnMixin {
     @Shadow
     private int itemAge;
 
-    ///data get entity @e[limit=1, type=!minecraft:player, sort=nearest]
     @Shadow
     public abstract ItemStack getStack();
 

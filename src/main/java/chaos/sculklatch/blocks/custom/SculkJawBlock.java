@@ -54,10 +54,27 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     @Override
+    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
+        System.out.println("step on me mommy");
+        if (entity instanceof LivingEntity && !state.get(IS_SCARED)) {
+            //entity.addVelocity(0, -0.5, 0);
+        }
+        super.onSteppedOn(world, pos, state, entity);
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        if (state.get(IS_SCARED)) {
+            return VoxelShapes.fullCube();
+        }
+        return COLLISION_SHAPE;
+    }
+
+    @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity && !state.get(IS_SCARED)) {
             entity.damage(world.getDamageSources().create(ModDamageSources.SCULK_LATCH), 1.0F);
-            entity.slowMovement(state, new Vec3d(0.9, 1.5, 0.9));
+            entity.slowMovement(state, new Vec3d(0.5, 0.6, 0.5));
         }
     }
 
@@ -72,11 +89,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     @Override
     public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         if (!state.get(IS_SCARED)) {
-            //playSound(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean useDistance) {
-
             damageSculkJaw(player, pos, state);
-            //world.setBlockState(pos, state.with(HEALTH, Math.min(60, Math.max(0, state.get(HEALTH) - ((int) ((SwordItem) player.getMainHandStack().getItem()).getAttackDamage())))));
-            System.out.println(state.get(HEALTH));
             if (state.get(HEALTH) <= 0) {
                 if (!world.isClient()) {
                     world.scheduleBlockTick(pos, this, 600);
@@ -150,11 +163,4 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
         }
     }
 
-    @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (state.get(IS_SCARED)) {
-            return VoxelShapes.fullCube();
-        }
-        return COLLISION_SHAPE;
-    }
 }

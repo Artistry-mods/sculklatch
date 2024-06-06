@@ -23,7 +23,6 @@ public class AmethystBellItem extends Item {
         if (!world.isClient()) {
             world.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_BELL_USE, SoundCategory.PLAYERS, 1F, 0.9F);
             world.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE, SoundCategory.PLAYERS, 1F, 0.9F);
-            //world.playSound(null, user.getBlockPos(), SoundEvents.BLOCK_BELL_RESONATE, SoundCategory.PLAYERS, 1F, 0.9F);
             world.emitGameEvent(ModGameEvents.AMETHYST_BELL_HIT, user.getPos(), new GameEvent.Emitter(user, ModBlocks.SCULK_CHEST.getDefaultState()));
             user.getItemCooldownManager().set(this, SculkLatch.AMETHYST_BELL_COOLDOWN);
             return TypedActionResult.success(user.getStackInHand(hand));

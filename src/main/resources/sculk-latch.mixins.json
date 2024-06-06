@@ -6,6 +6,7 @@
     "ChestPlaceMixin",
     "NoSculkBundleDespawnMixin",
     "OnDeathItemSaveMixin",
+    "SculkJawPullEntitiesDownMixin",
     "SculkSpreadJawMixin"
   ],
   "injectors": {
