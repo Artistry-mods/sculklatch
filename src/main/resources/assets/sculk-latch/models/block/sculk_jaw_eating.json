@@ -3,7 +3,7 @@
   "textures": {
     "front": "sculk-latch:block/sculk_jaw_side",
     "side": "sculk-latch:block/sculk_jaw_side",
-    "top": "sculk-latch:block/sculk_jaw_with_teeth",
+    "top": "sculk-latch:block/sculk_jaw_activated",
     "bottom": "sculk-latch:block/sculk_jaw_side"
   }
 }

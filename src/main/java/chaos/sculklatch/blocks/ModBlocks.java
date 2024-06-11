@@ -16,7 +16,7 @@ public class ModBlocks {
             new SculkChestBlock(AbstractBlock.Settings.create().strength(50.0F, 12.0F), () -> ModBlockEntities.SCULK_CHEST_BLOCK_ENTITY_TYPE));
 
     public static final Block SCULK_JAW = registerBlock("sculk_jaw",
-            new SculkJawBlock(AbstractBlock.Settings.copy(Blocks.SCULK_CATALYST)));
+            new SculkJawBlock(AbstractBlock.Settings.copy(Blocks.SCULK_CATALYST).strength(20.0f, 3.0f)));
 
     private static Block registerBlock(String name, Block item) {
         return Registry.register(Registries.BLOCK, new Identifier(SculkLatch.MOD_ID, name), item);

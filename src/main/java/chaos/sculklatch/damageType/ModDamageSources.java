@@ -6,6 +6,6 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class ModDamageSources {
-    public static RegistryKey<DamageType> SCULK_LATCH = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier("sculk_jaw"));
+    public static RegistryKey<DamageType> SCULK_JAW = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier("sculk_jaw"));
 
 }

@@ -1,5 +1,6 @@
 package chaos.sculklatch.blocks.custom;
 
+import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.damageType.ModDamageSources;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -8,6 +9,7 @@ import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -25,7 +27,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -33,18 +34,21 @@ import net.minecraft.world.event.GameEvent;
 public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty IS_SCARED = BooleanProperty.of("is_scared");
-    public static final IntProperty HEALTH = IntProperty.of("health", 0, 60);
+    //public static final BooleanProperty IS_EATING = BooleanProperty.of("is_eating");
+    public static final IntProperty HEALTH = IntProperty.of("health", 0, SculkLatch.SCULK_JAW_HEALTH);
     private static final VoxelShape COLLISION_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0);
+    private static final VoxelShape FULL_COLLISION_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 15.0, 16.0);
 
     public SculkJawBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(IS_SCARED, false).with(HEALTH, 60));
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(IS_SCARED, false).with(HEALTH, SculkLatch.SCULK_JAW_HEALTH)/*.with(IS_EATING, false)*/);
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FACING);
         builder.add(IS_SCARED);
+        //builder.add(IS_EATING);
         builder.add(HEALTH);
     }
 
@@ -55,17 +59,32 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (state.get(IS_SCARED)) {
-            return VoxelShapes.fullCube();
+        if (state.get(IS_SCARED) || (!context.isAbove(COLLISION_SHAPE.offset(0, 0.3, 0), pos, true)  && !context.isDescending())) {
+            return FULL_COLLISION_SHAPE;
         }
         return COLLISION_SHAPE;
     }
 
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (entity instanceof LivingEntity && !state.get(IS_SCARED)) {
-            entity.damage(world.getDamageSources().create(ModDamageSources.SCULK_LATCH), 1.0F);
+        if (entity instanceof LivingEntity && !state.get(IS_SCARED) && !(entity instanceof WardenEntity)) {
+            /*
+            if (!state.get(IS_EATING)) {
+                world.setBlockState(pos, state.with(IS_EATING, true));
+            }
+
+             */
+            entity.damage(world.getDamageSources().create(ModDamageSources.SCULK_JAW), 1.0F);
+            entity.addVelocity(pos.toCenterPos().add(0, -0.3, 0).subtract(entity.getPos()).multiply(0.3));
             entity.slowMovement(state, new Vec3d(0.5, 0.6, 0.5));
+            /*
+            if (!entity.isAlive()) {
+                if (state.get(IS_EATING)) {
+                    world.setBlockState(pos, state.with(IS_EATING, false));
+                }
+            }
+
+             */
         }
     }
 
@@ -73,7 +92,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
         if (state.get(IS_SCARED)) {
-            world.setBlockState(pos, state.with(IS_SCARED, false).with(HEALTH, 60));
+            world.setBlockState(pos, state.with(IS_SCARED, false).with(HEALTH, SculkLatch.SCULK_JAW_HEALTH));
         }
     }
 
@@ -84,7 +103,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
             if (state.get(HEALTH) <= 0) {
                 if (!world.isClient()) {
                     world.scheduleBlockTick(pos, this, 600);
-                    world.setBlockState(pos, state.with(IS_SCARED, true).with(HEALTH, 60));
+                    world.setBlockState(pos, state.with(IS_SCARED, true).with(HEALTH, SculkLatch.SCULK_JAW_HEALTH)/*.with(IS_EATING, false)*/);
                 }
             }
         }
@@ -147,7 +166,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
             }
 
             if (!player.getWorld().isClient) {
-                ((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, pos.getX(), pos.getY(), pos.getZ(), 5, 0.1, 0.0, 0.1, 0.2);
+                ((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, pos.getX(), pos.getY(), pos.getZ(), (int) f, 0.1, 0.0, 0.1, 0.2);
             }
 
             player.addExhaustion(0.1F);
