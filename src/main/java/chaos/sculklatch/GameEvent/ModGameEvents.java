@@ -1,5 +1,6 @@
 package chaos.sculklatch.GameEvent;
 
+import net.fabricmc.fabric.api.registry.SculkSensorFrequencyRegistry;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -13,6 +14,7 @@ public class ModGameEvents {
     }
 
     public static void registerModGameEvents() {
-
+        // Give the Amethyst Bell game event a frequency of 11
+        SculkSensorFrequencyRegistry.register(ModGameEvents.AMETHYST_BELL_HIT, 11);
     }
 }
