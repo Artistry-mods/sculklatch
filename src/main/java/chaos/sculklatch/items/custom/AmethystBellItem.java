@@ -1,6 +1,6 @@
 package chaos.sculklatch.items.custom;
 
-import chaos.sculklatch.GameEvent.ModGameEvents;
+import chaos.sculklatch.gameevent.ModGameEvents;
 import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.blocks.ModBlocks;
 import net.minecraft.entity.player.PlayerEntity;

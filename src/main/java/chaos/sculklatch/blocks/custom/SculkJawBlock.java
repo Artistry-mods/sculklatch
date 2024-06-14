@@ -1,7 +1,7 @@
 package chaos.sculklatch.blocks.custom;
 
 import chaos.sculklatch.SculkLatch;
-import chaos.sculklatch.damageType.ModDamageSources;
+import chaos.sculklatch.damagetype.ModDamageSources;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;

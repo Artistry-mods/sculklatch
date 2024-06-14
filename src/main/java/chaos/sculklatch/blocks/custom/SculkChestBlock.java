@@ -2,14 +2,8 @@ package chaos.sculklatch.blocks.custom;
 
 import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
 import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -22,11 +16,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class SculkChestBlock extends ChestBlock implements BlockEntityProvider {
+public class SculkChestBlock extends ChestBlock implements BlockEntityProvider, SculkSpreadable {
 
     public static final BooleanProperty IS_SCARED = BooleanProperty.of("is_scared");
     private ServerPlayerEntity lastPlayerToOpen;
@@ -71,5 +66,10 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider {
             return super.onUse(state, world, pos, player, hand, hit);
         }
         return ActionResult.PASS;
+    }
+
+    @Override
+    public int spread(SculkSpreadManager.Cursor cursor, WorldAccess world, BlockPos catalystPos, Random random, SculkSpreadManager spreadManager, boolean shouldConvertToBlock) {
+        return 0;
     }
 }

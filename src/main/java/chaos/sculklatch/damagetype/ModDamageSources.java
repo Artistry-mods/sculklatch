@@ -1,4 +1,4 @@
-package chaos.sculklatch.damageType;
+package chaos.sculklatch.damagetype;
 
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.registry.RegistryKey;
