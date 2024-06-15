@@ -2,6 +2,7 @@ package chaos.sculklatch.blocks.custom;
 
 import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.damagetype.ModDamageSources;
+import chaos.sculklatch.tags.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -9,7 +10,6 @@ import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -59,7 +59,18 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (state.get(IS_SCARED) || (!context.isAbove(COLLISION_SHAPE.offset(0, 0.3, 0), pos, true)  && !context.isDescending())) {
+        if (context instanceof EntityShapeContext) {
+            Entity entity = ((EntityShapeContext) context).getEntity();
+            if (entity != null) {
+                if (entity.getType().isIn(ModTags.SCULK_JAW_IMMUNE)) {
+                    return FULL_COLLISION_SHAPE;
+                }
+                if (entity.isSneaking() && entity.squaredDistanceTo(pos.toCenterPos().add(0, 0.5,0)) > 0.039) {
+                    return FULL_COLLISION_SHAPE;
+                }
+            }
+        }
+        if (state.get(IS_SCARED) || (!context.isAbove(COLLISION_SHAPE.offset(0, 0.3, 0), pos, true))) {
             return FULL_COLLISION_SHAPE;
         }
         return COLLISION_SHAPE;
@@ -67,7 +78,8 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
 
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (entity instanceof LivingEntity && !state.get(IS_SCARED) && !(entity instanceof WardenEntity)) {
+        if (entity instanceof LivingEntity && !state.get(IS_SCARED) && !(entity.getType().isIn(ModTags.SCULK_JAW_IMMUNE))) {
+            entity.setSneaking(false);
             /*
             if (!state.get(IS_EATING)) {
                 world.setBlockState(pos, state.with(IS_EATING, true));

@@ -12,14 +12,17 @@ import net.minecraft.block.entity.SculkSpreadManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static net.minecraft.block.ChestBlock.FACING;
@@ -27,7 +30,11 @@ import static net.minecraft.block.ChestBlock.WATERLOGGED;
 
 
 @Mixin(SculkBlock.class)
-public class SculkJawSpreadMixin {
+public class SculkSpreadMixin {
+
+    @Unique
+    private static final Map<Integer, Direction> FACING_MAP = new HashMap<>(Map.of(0, Direction.NORTH, 1, Direction.EAST, 2, Direction.SOUTH, 3, Direction.WEST));
+
     @Shadow
     private static int getDecay(SculkSpreadManager spreadManager, BlockPos cursorPos, BlockPos catalystPos, int charge) {
         return 0;
@@ -49,13 +56,13 @@ public class SculkJawSpreadMixin {
         BlockPos blockPos = cursor.getPos();
         BlockPos raisedBlockPos = blockPos.up();
         //replace chest with sculk chest
-        for (BlockPos potentialChestPos : BlockPos.iterate(blockPos.add(1, 0, 1), blockPos.add(-1, 0, -1))) {
+        for (BlockPos potentialChestPos : BlockPos.iterate(raisedBlockPos.add(1, 0, 1), raisedBlockPos.add(-1, 0, -1))) {
             BlockState chestState = world.getBlockState(potentialChestPos);
             if (chestState.isOf(Blocks.CHEST)) {
                 BlockState sculkChestBlockState = ModBlocks.SCULK_CHEST.getDefaultState().with(FACING, chestState.get(FACING)).with(WATERLOGGED, chestState.get(WATERLOGGED));
                 BlockEntity chestBlockEntity = world.getBlockEntity(potentialChestPos);
                 if (chestBlockEntity instanceof ChestBlockEntity) {
-                    Map<ItemStack, Integer> itemStackMap = new java.util.HashMap<>(Map.of());
+                    Map<ItemStack, Integer> itemStackMap = new HashMap<>(Map.of());
                     for (int slot = 0; slot < ((ChestBlockEntity) chestBlockEntity).size(); slot++) {
                         itemStackMap.put(((ChestBlockEntity) chestBlockEntity).getStack(slot), slot);
                     }
@@ -81,7 +88,8 @@ public class SculkJawSpreadMixin {
                     //sculk jaw edit
                     if (random.nextInt(3) == 1) {
                         raisedBlockPos = raisedBlockPos.down();
-                        blockState = ModBlocks.SCULK_JAW.getDefaultState();
+                        Integer facingIndex = random.nextInt(4);
+                        blockState = ModBlocks.SCULK_JAW.getDefaultState().with(FACING, FACING_MAP.get(facingIndex));
                     }
                     world.setBlockState(raisedBlockPos, blockState, Block.NOTIFY_ALL);
                     world.playSound(null, blockPos, blockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);

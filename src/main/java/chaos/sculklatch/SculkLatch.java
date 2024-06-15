@@ -3,6 +3,7 @@ package chaos.sculklatch;
 import chaos.sculklatch.gameevent.ModGameEvents;
 import chaos.sculklatch.blocks.ModBlocks;
 import chaos.sculklatch.items.ModItems;
+import chaos.sculklatch.tags.ModTags;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
@@ -25,6 +26,7 @@ public class SculkLatch implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModTags.registerModTags();
         ModItems.registerModItems();
         ModBlocks.registerModItems();
         ModGameEvents.registerModGameEvents();

@@ -16,7 +16,8 @@ public class SculkJawPullEntitiesDownMixin {
     public void tickMovement(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         if (!(livingEntity instanceof WardenEntity)) {
-            if (livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down()).getBlock() == ModBlocks.SCULK_JAW) {
+            if (livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down()).getBlock() == ModBlocks.SCULK_JAW && !livingEntity.isSneaking()) {
+                livingEntity.addVelocity(livingEntity.getBlockPos().down().toCenterPos().add(0, -0.3, 0).subtract(livingEntity.getPos()).multiply(0.3));
                 livingEntity.slowMovement(livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down()), new Vec3d(0.5, 1, 0.5));
             }
         }
