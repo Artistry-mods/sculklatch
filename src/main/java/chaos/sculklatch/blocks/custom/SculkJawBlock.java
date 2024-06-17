@@ -29,6 +29,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -82,11 +83,19 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity && !state.get(IS_SCARED) && !(entity.getType().isIn(ModTags.SCULK_JAW_IMMUNE))) {
+            if (entity instanceof PlayerEntity && ((PlayerEntity) entity).getAbilities().flying) {
+                return;
+            }
             entity.setSneaking(false);
             entity.damage(world.getDamageSources().create(ModDamageSources.SCULK_JAW), 1.0F);
             entity.addVelocity(pos.toCenterPos().add(0, -0.3, 0).subtract(entity.getPos()).multiply(0.3));
             entity.slowMovement(state, new Vec3d(0.5, 0.6, 0.5));
         }
+    }
+
+    @Override
+    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+        return VoxelShapes.empty();
     }
 
     @Override

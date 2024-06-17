@@ -1,7 +1,7 @@
 package chaos.sculklatch;
 
-import chaos.sculklatch.gameevent.ModGameEvents;
 import chaos.sculklatch.blocks.ModBlocks;
+import chaos.sculklatch.gameevent.ModGameEvents;
 import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.tags.ModTags;
 import net.fabricmc.api.ModInitializer;

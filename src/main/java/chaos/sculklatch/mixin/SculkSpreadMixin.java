@@ -1,15 +1,10 @@
 package chaos.sculklatch.mixin;
 
 import chaos.sculklatch.blocks.ModBlocks;
-import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SculkBlock;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.entity.SculkSpreadManager;
-import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -26,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static net.minecraft.block.ChestBlock.FACING;
-import static net.minecraft.block.ChestBlock.WATERLOGGED;
 
 
 @Mixin(SculkBlock.class)
@@ -56,52 +50,78 @@ public class SculkSpreadMixin {
         BlockPos blockPos = cursor.getPos();
         BlockPos raisedBlockPos = blockPos.up();
         //replace chest with sculk chest
-        for (BlockPos potentialChestPos : BlockPos.iterate(raisedBlockPos.add(1, 0, 1), raisedBlockPos.add(-1, 0, -1))) {
-            BlockState chestState = world.getBlockState(potentialChestPos);
-            if (chestState.isOf(Blocks.CHEST)) {
-                BlockState sculkChestBlockState = ModBlocks.SCULK_CHEST.getDefaultState().with(FACING, chestState.get(FACING)).with(WATERLOGGED, chestState.get(WATERLOGGED));
-                BlockEntity chestBlockEntity = world.getBlockEntity(potentialChestPos);
-                if (chestBlockEntity instanceof ChestBlockEntity) {
-                    Map<ItemStack, Integer> itemStackMap = new HashMap<>(Map.of());
-                    for (int slot = 0; slot < ((ChestBlockEntity) chestBlockEntity).size(); slot++) {
-                        itemStackMap.put(((ChestBlockEntity) chestBlockEntity).getStack(slot), slot);
-                    }
+        ///tp -1000655.500000 100.000000 -59887.500000
+        if (world != null) {
+            /*
+            for (BlockPos potentialChestPos : BlockPos.iterate(raisedBlockPos.add(1, 0, 1), raisedBlockPos.add(-1, 0, -1))) {
+                BlockState chestState = world.getBlockState(potentialChestPos);
+                if (chestState.isOf(Blocks.CHEST)) {
+                    BlockEntity chestBlockEntity = world.getBlockEntity(potentialChestPos);
+                    System.out.println("checking if (chestBlockEntity instanceof ChestBlockEntity)");
+                    System.out.println("pos is " + potentialChestPos + " and chestBlockEntity is " + chestBlockEntity);
 
-                    ((ChestBlockEntity) chestBlockEntity).clear();
-                    world.setBlockState(potentialChestPos, sculkChestBlockState, Block.NOTIFY_ALL);
-                    world.playSound(null, blockPos, sculkChestBlockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    BlockEntity amethystblockEntity = world.getBlockEntity(potentialChestPos);
+                    if (chestBlockEntity != null) {
+                        if (chestBlockEntity instanceof ChestBlockEntity) {
 
-                    if (amethystblockEntity instanceof SculkChestBlockEntity) {
-                        itemStackMap.forEach((stack, slot) -> ((SculkChestBlockEntity) amethystblockEntity).setStack(slot, stack));
+                            System.out.println("pulling items from the chest");
+                            List<ItemStack> inventory = new ArrayList<>();
+                            //Map<ItemStack, Integer> itemStackMap = new HashMap<>(Map.of());
+                            for (int slot = 0; slot < ((ChestBlockEntity)chestBlockEntity).size(); slot++) {
+                                ItemStack stack = ((ChestBlockEntity)chestBlockEntity).getStack(slot);
+                                System.out.println("Storing item: " + stack + " in slot: " + slot);
+                                inventory.add(slot, stack);
+                                //itemStackMap.put(stack, slot);
+                            }
+
+                            System.out.println("clearing chestBlockEntity");
+                            ((ChestBlockEntity)chestBlockEntity).clear();
+                            BlockState sculkChestBlockState = ModBlocks.SCULK_CHEST.getDefaultState().with(FACING, chestState.get(FACING)).with(WATERLOGGED, chestState.get(WATERLOGGED));
+                            world.setBlockState(potentialChestPos, sculkChestBlockState, Block.NOTIFY_ALL);
+                            System.out.println("playing a sound");
+                            world.playSound(null, blockPos, sculkChestBlockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+                            BlockEntity amethystblockEntity = world.getBlockEntity(potentialChestPos);
+                            System.out.println("pos is " + potentialChestPos + " and chestBlockEntity is " + amethystblockEntity);
+                            if (amethystblockEntity instanceof SculkChestBlockEntity) {
+                                System.out.println("is amethyst block entity");
+                                for (int i = 0; i < inventory.size() - 1; i++) {
+                                    ItemStack itemStack = inventory.get(i);
+                                    ((SculkChestBlockEntity) amethystblockEntity).setStack(i, itemStack);
+
+                                    //inventory.forEach((stack) -> ((SculkChestBlockEntity) amethystblockEntity).setStack(slot, stack));
+                                }
+                                //itemStackMap.forEach((stack, slot) -> ((SculkChestBlockEntity) amethystblockEntity).setStack(slot, stack));
+                            }
+                        }
                     }
                 }
             }
-        }
-        if (cursorCharge != 0 && random.nextInt(spreadManager.getSpreadChance()) == 0) {
-            boolean bl = blockPos.isWithinDistance(catalystPos, spreadManager.getMaxDistance());
-            if (!bl && shouldNotDecay(world, blockPos)) {
-                //make sensor, shrieker and sculk jaw spawn.
-                int j = spreadManager.getExtraBlockChance();
-                if (random.nextInt(j) < cursorCharge) {
-                    BlockState blockState = this.getExtraBlockState(world, raisedBlockPos, random, spreadManager.isWorldGen());
-                    //sculk jaw edit
-                    if (random.nextInt(3) == 1) {
-                        raisedBlockPos = raisedBlockPos.down();
-                        Integer facingIndex = random.nextInt(4);
-                        blockState = ModBlocks.SCULK_JAW.getDefaultState().with(FACING, FACING_MAP.get(facingIndex));
+             */
+            if (cursorCharge != 0 && random.nextInt(spreadManager.getSpreadChance()) == 0) {
+                boolean bl = blockPos.isWithinDistance(catalystPos, spreadManager.getMaxDistance());
+                if (!bl && shouldNotDecay(world, blockPos)) {
+                    //make sensor, shrieker and sculk jaw spawn.
+                    int j = spreadManager.getExtraBlockChance();
+                    if (random.nextInt(j) < cursorCharge) {
+                        BlockState blockState = this.getExtraBlockState(world, raisedBlockPos, random, spreadManager.isWorldGen());
+                        //sculk jaw edit
+                        if (random.nextInt(3) == 1) {
+                            raisedBlockPos = raisedBlockPos.down();
+                            Integer facingIndex = random.nextInt(4);
+                            blockState = ModBlocks.SCULK_JAW.getDefaultState().with(FACING, FACING_MAP.get(facingIndex));
+                        }
+                        world.setBlockState(raisedBlockPos, blockState, Block.NOTIFY_ALL);
+                        world.playSound(null, blockPos, blockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                     }
-                    world.setBlockState(raisedBlockPos, blockState, Block.NOTIFY_ALL);
-                    world.playSound(null, blockPos, blockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-                }
 
-                cir.setReturnValue(Math.max(0, cursorCharge - j));
+                    cir.setReturnValue(Math.max(0, cursorCharge - j));
+                } else {
+                    cir.setReturnValue(random.nextInt(spreadManager.getDecayChance()) != 0 ? cursorCharge : cursorCharge - (bl ? 1 : getDecay(spreadManager, blockPos, catalystPos, cursorCharge)));
+                }
             } else {
-                cir.setReturnValue(random.nextInt(spreadManager.getDecayChance()) != 0 ? cursorCharge : cursorCharge - (bl ? 1 : getDecay(spreadManager, blockPos, catalystPos, cursorCharge)));
+                cir.setReturnValue(cursorCharge);
             }
-        } else {
-            cir.setReturnValue(cursorCharge);
+            cir.cancel();
         }
-        cir.cancel();
     }
 }
