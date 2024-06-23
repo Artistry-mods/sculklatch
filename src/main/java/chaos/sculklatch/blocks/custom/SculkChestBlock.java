@@ -40,6 +40,17 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider, 
         builder.add(IS_SCARED);
     }
 
+
+    @Override
+    public float calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos) {
+        if (state.get(IS_SCARED)) {
+            System.out.println("breaking");
+            return super.calcBlockBreakingDelta(state, player, world, pos) * 20f; // Hardness when powered
+        } else {
+            return super.calcBlockBreakingDelta(state, player, world, pos); // Default hardness
+        }
+    }
+
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         super.scheduledTick(state, world, pos, random);
