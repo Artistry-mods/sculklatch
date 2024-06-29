@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
     public static final Block SCULK_CHEST = registerBlock("sculk_chest",
-            new SculkChestBlock(AbstractBlock.Settings.create().strength(200.0f, 12.0F), () -> ModBlockEntities.SCULK_CHEST_BLOCK_ENTITY_TYPE));
+            new SculkChestBlock(AbstractBlock.Settings.create().strength(200.0f, 12.0F).luminance(stat -> 0), () -> ModBlockEntities.SCULK_CHEST_BLOCK_ENTITY_TYPE));
 
     public static final Block SCULK_JAW = registerBlock("sculk_jaw",
             new SculkJawBlock(AbstractBlock.Settings.copy(Blocks.SCULK_CATALYST).strength(20.0f, 3.0f).solid()));

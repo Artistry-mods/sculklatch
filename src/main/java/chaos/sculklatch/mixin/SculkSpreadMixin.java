@@ -59,22 +59,21 @@ public class SculkSpreadMixin {
                     BlockEntity chestBlockEntity = world.getBlockEntity(potentialChestPos);
                     System.out.println("checking if (chestBlockEntity instanceof ChestBlockEntity)");
                     System.out.println("pos is " + potentialChestPos + " and chestBlockEntity is " + chestBlockEntity);
+                    if (chestBlockEntity instanceof ChestBlockEntity) {
+                        if (!((ChestBlockEntity) chestBlockEntity).isEmpty()) {
 
-                    if (chestBlockEntity != null) {
-                        if (chestBlockEntity instanceof ChestBlockEntity) {
-
-                            System.out.println("pulling items from the chest");
                             List<ItemStack> inventory = new ArrayList<>();
+                            System.out.println("pulling items");
                             //Map<ItemStack, Integer> itemStackMap = new HashMap<>(Map.of());
-                            for (int slot = 0; slot < ((ChestBlockEntity)chestBlockEntity).size(); slot++) {
-                                ItemStack stack = ((ChestBlockEntity)chestBlockEntity).getStack(slot);
+                            for (int slot = 0; slot < ((ChestBlockEntity) chestBlockEntity).size(); slot++) {
+                                ItemStack stack = ((ChestBlockEntity) chestBlockEntity).getStack(slot);
                                 System.out.println("Storing item: " + stack + " in slot: " + slot);
                                 inventory.add(slot, stack);
                                 //itemStackMap.put(stack, slot);
                             }
 
                             System.out.println("clearing chestBlockEntity");
-                            ((ChestBlockEntity)chestBlockEntity).clear();
+                            ((ChestBlockEntity) chestBlockEntity).clear();
                             BlockState sculkChestBlockState = ModBlocks.SCULK_CHEST.getDefaultState().with(FACING, chestState.get(FACING)).with(WATERLOGGED, chestState.get(WATERLOGGED));
                             world.setBlockState(potentialChestPos, sculkChestBlockState, Block.NOTIFY_ALL);
                             System.out.println("playing a sound");
@@ -111,7 +110,9 @@ public class SculkSpreadMixin {
                             blockState = ModBlocks.SCULK_JAW.getDefaultState().with(FACING, FACING_MAP.get(facingIndex));
                         }
                         world.setBlockState(raisedBlockPos, blockState, Block.NOTIFY_ALL);
-                        world.playSound(null, blockPos, blockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        if (blockState != null) {
+                            world.playSound(null, blockPos, blockState.getSoundGroup().getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        }
                     }
 
                     cir.setReturnValue(Math.max(0, cursorCharge - j));
