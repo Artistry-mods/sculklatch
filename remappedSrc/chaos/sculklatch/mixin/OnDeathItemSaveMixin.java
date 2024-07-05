@@ -2,11 +2,7 @@ package chaos.sculklatch.mixin;
 
 import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.SculkBundleItem;
-import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
-import chaos.sculklatch.items.custom.components.custom.OverfilledBundleContentComponent;
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -18,19 +14,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Mixin(ServerPlayerEntity.class)
 public class OnDeathItemSaveMixin {
 
     @Unique
-    private static List<Integer> getSculkBundles(Inventory inventory) {
-        List<Integer> slots = new ArrayList<>();
+    private static Vec<Integer> getSculkBundles(Inventory inventory) {
+        Vec<Integer> slots = new Vec<>();
         for (int j = 0; j < inventory.size(); ++j) {
             ItemStack itemStack = inventory.getStack(j);
             if (itemStack.getItem().equals(ModItems.SCULK_BUNDLE)) {
-                slots.add(j);
+                slots.push(j);
             }
         }
         return slots;
@@ -40,14 +33,14 @@ public class OnDeathItemSaveMixin {
     private static void fillSculkBundles(ServerPlayerEntity player) {
         int sculk_bundles = player.getInventory().count(ModItems.SCULK_BUNDLE);
         if (sculk_bundles != 0) {
-            List<Integer> sculkBundleSlots = getSculkBundles(player.getInventory());
-            for (Integer sculkBundleSlot : sculkBundleSlots) {
-                ItemStack sculkBundle = player.getInventory().getStack(sculkBundleSlot);
-                OverfilledBundleContentComponent bundleContentsComponent = sculkBundle.get(ModDataComponentTypes.OVERFILLED_BUNDLE_CONTENTS);
-                if (bundleContentsComponent == null) return;
-                OverfilledBundleContentComponent.Builder builder = new OverfilledBundleContentComponent.Builder(bundleContentsComponent);
-                builder.saveAll(player);
-                sculkBundle.set(ModDataComponentTypes.OVERFILLED_BUNDLE_CONTENTS, builder.build());
+            Vec<Integer> sculkBundleSlots = getSculkBundles(player.getInventory());
+            for (int i = 0; i < sculkBundleSlots.size(); i++) {
+                ItemStack sculkBundle = player.getInventory().getStack(sculkBundleSlots.get(i));
+                for (int j = 0; j < player.getInventory().size(); ++j) {
+                    ItemStack itemStack = player.getInventory().getStack(j);
+                    int removedItems = SculkBundleItem.overFillBundle(sculkBundle, itemStack);
+                    itemStack.decrement(removedItems);
+                }
             }
         }
     }

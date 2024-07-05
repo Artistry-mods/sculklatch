@@ -19,7 +19,7 @@ public class ModBlocks {
             new SculkJawBlock(AbstractBlock.Settings.copy(Blocks.SCULK_CATALYST).strength(20.0f, 3.0f).solid()));
 
     private static Block registerBlock(String name, Block item) {
-        return Registry.register(Registries.BLOCK, Identifier.of(SculkLatch.MOD_ID, name), item);
+        return Registry.register(Registries.BLOCK, new Identifier(SculkLatch.MOD_ID, name), item);
     }
 
     public static void registerModItems() {

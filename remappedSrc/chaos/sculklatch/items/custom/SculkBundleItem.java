@@ -1,12 +1,8 @@
 package chaos.sculklatch.items.custom;
 
-import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
-import chaos.sculklatch.items.custom.components.custom.OverfilledBundleContentComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,20 +20,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class SculkBundleItem extends BundleItem {
-    public SculkBundleItem(Settings settings) {
-        super(settings);
-    }
-
-    public static float getAmountOverFilled(ItemStack stack) {
-        OverfilledBundleContentComponent bundleContentsComponent = stack.getOrDefault(ModDataComponentTypes.OVERFILLED_BUNDLE_CONTENTS, OverfilledBundleContentComponent.DEFAULT);
-        return bundleContentsComponent.getOccupancy().floatValue();
-    }
-
-    /*
     private static final String OVERFILLED_ITEMS_KEY = "OverFilledItems";
     private static final int MAX_OVER_FILL_STORAGE = 64 * 10;
 
-    public SculkBundleItem(Settings settings) {
+    public SculkBundleItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
@@ -132,8 +118,8 @@ public class SculkBundleItem extends BundleItem {
     }
 
     private void RegisterModelPredicate() {
-        ModelPredicateProviderRegistry.register(Identifier.of("filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountFilled(itemStack));
-        ModelPredicateProviderRegistry.register(Identifier.of("over_filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountOverFilled(itemStack));
+        ModelPredicateProviderRegistry.register(new Identifier("filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountFilled(itemStack));
+        ModelPredicateProviderRegistry.register(new Identifier("over_filled"), (itemStack, clientWorld, livingEntity, i) -> SculkBundleItem.getAmountOverFilled(itemStack));
     }
 
     @Override
@@ -158,5 +144,4 @@ public class SculkBundleItem extends BundleItem {
             }
         }
     }
-    */
 }

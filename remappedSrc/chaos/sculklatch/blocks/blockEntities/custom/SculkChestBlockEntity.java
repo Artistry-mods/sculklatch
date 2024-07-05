@@ -3,15 +3,12 @@ package chaos.sculklatch.blocks.blockEntities.custom;
 import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
-import chaos.sculklatch.gameevent.ModGameEvents;
 import chaos.sculklatch.items.custom.AmethystBellItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.entity.ChestLidAnimator;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -105,10 +102,13 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
             return this.positionSource;
         }
 
-        @Override
-        public boolean accepts(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter) {
-            if (Objects.equals(event, ModGameEvents.AMETHYST_BELL_HIT) && emitter != null && emitter.sourceEntity() instanceof LivingEntity) {
-                for (ItemStack itemStack : ((LivingEntity) emitter.sourceEntity()).getHandItems()) {
+        public boolean triggersAvoidCriterion() {
+            return true;
+        }
+
+        public boolean accepts(ServerWorld world, BlockPos pos, GameEvent event, @Nullable GameEvent.Emitter emitter) {
+            if (Objects.equals(event.getId(), "amethyst_bell_hit") && emitter != null && emitter.sourceEntity() != null) {
+                for (ItemStack itemStack : emitter.sourceEntity().getHandItems()) {
                     if (itemStack.getItem() instanceof AmethystBellItem) {
                         if (!SculkChestBlockEntity.this.hasCustomName()) {
                             world.setBlockState(this.pos, world.getBlockState(this.pos).with(SculkChestBlock.IS_SCARED, true));
@@ -129,12 +129,7 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
         }
 
         @Override
-        public void accept(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
-
-        }
-
-        public boolean triggersAvoidCriterion() {
-            return true;
+        public void accept(ServerWorld world, BlockPos pos, GameEvent event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
         }
 
         public void onListen() {

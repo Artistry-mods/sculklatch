@@ -6,11 +6,10 @@ import chaos.sculklatch.tags.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -133,12 +132,9 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     public void damageSculkJaw(PlayerEntity player, BlockPos pos, BlockState state) {
-        if (player.getWorld().isClient()) {
-            return;
-        }
         float f = (float) player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-
-        float g = EnchantmentHelper.getDamage((ServerWorld) player.getWorld(), player.getWeaponStack(), new WardenEntity(EntityType.WARDEN, player.getWorld()), player.getDamageSources().playerAttack(player), f);
+        float g;
+        g = EnchantmentHelper.getAttackDamage(player.getMainHandStack(), EntityGroup.UNDEAD);
         float h = player.getAttackCooldownProgress(0.5F);
         f *= 0.2F + h * h * 0.8F;
         g *= h;
@@ -163,7 +159,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
             }
 
             if (bl4) {
-                float l = 1.0F + (float)player.getAttributeValue(EntityAttributes.PLAYER_SWEEPING_DAMAGE_RATIO) * f;
+                float l = 1.0F + EnchantmentHelper.getSweepingMultiplier(player) * f;
 
                 player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
                 player.spawnSweepAttackParticles();

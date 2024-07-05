@@ -28,8 +28,8 @@ public class HopperBlockEntityMixin {
 
     // Prevent hoppers from inserting items into Sculk Chests
     @Inject(at = @At("HEAD"), method = "insert", cancellable = true)
-    private static void insert(World world, BlockPos pos, HopperBlockEntity blockEntity, CallbackInfoReturnable<Boolean> cir) {
-        Direction direction = world.getBlockState(pos).get(HopperBlock.FACING);
+    private static void insert(World world, BlockPos pos, BlockState state, Inventory inventory, CallbackInfoReturnable<Boolean> cir) {
+        Direction direction = state.get(HopperBlock.FACING);
         pos = pos.offset(direction);
         BlockPos blockPos = BlockPos.ofFloored(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         BlockState blockState = world.getBlockState(blockPos);

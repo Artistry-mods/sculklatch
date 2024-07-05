@@ -12,7 +12,7 @@ public class ModRecipes {
     public static RecipeSerializer<SculkBudelRecipe> SCULK_LATCH_BUNDEL = register("crafting_special_sculkbudel", new SpecialRecipeSerializer<>(SculkBudelRecipe::new));
 
     private static RecipeSerializer<SculkBudelRecipe> register(String name, SpecialRecipeSerializer<SculkBudelRecipe> serializer) {
-        return Registry.register(Registries.RECIPE_SERIALIZER, Identifier.of(SculkLatch.MOD_ID, name), serializer);
+        return Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(SculkLatch.MOD_ID, name), serializer);
     }
 
     public static void registerModRecipes() {

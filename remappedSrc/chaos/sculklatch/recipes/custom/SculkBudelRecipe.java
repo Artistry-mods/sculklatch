@@ -7,51 +7,52 @@ import net.minecraft.item.*;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class SculkBudelRecipe extends SpecialCraftingRecipe {
-    public SculkBudelRecipe(CraftingRecipeCategory category) {
-        super(category);
+    public SculkBudelRecipe(Identifier id, CraftingRecipeCategory category) {
+        super(id, category);
     }
 
-
     @Override
-    public boolean matches(CraftingRecipeInput input, World world) {
+    public boolean matches(RecipeInputInventory inventory, World world) {
         int sculkLatchCount = 0;
-        int bundles = 0;
-        for(int k = 0; k < input.getSize(); ++k) {
-            ItemStack itemStack = input.getStackInSlot(k);
-            if (!itemStack.isEmpty()) {
-                if (itemStack.getItem() == ModItems.SCULK_LATCH) {
+        for (int i = 0; i < inventory.size(); ++i) {
+            ItemStack itemStack2 = inventory.getStack(i);
+            if (!itemStack2.isEmpty()) {
+                if (itemStack2.getItem() == ModItems.SCULK_LATCH) {
                     sculkLatchCount ++;
-                }
-                if (itemStack.getItem() == Items.BUNDLE) {
-                    bundles ++;
                 }
             }
         }
-        return sculkLatchCount == 1 && bundles == 1;
+        return sculkLatchCount == 1 && inventory.count(Items.BUNDLE) == 1;
     }
 
     @Override
-    public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+    public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
+        System.out.println("crafting");
         ItemStack itemStack = ItemStack.EMPTY;
 
-        for(int i = 0; i < input.getSize(); ++i) {
-            ItemStack itemStack2 = input.getStackInSlot(i);
+        for(int i = 0; i < inventory.size(); ++i) {
+            ItemStack itemStack2 = inventory.getStack(i);
             if (!itemStack2.isEmpty()) {
                 Item item = itemStack2.getItem();
                 if (item instanceof BundleItem) {
+                    System.out.println(item);
                     itemStack = itemStack2;
                 }
             }
         }
+        System.out.println(itemStack.getNbt());
 
-        return itemStack.copyComponentsToNewStack(ModItems.SCULK_BUNDLE, 1);
+        ItemStack resultStack = ModItems.SCULK_BUNDLE.getDefaultStack();
+        if (itemStack.getNbt() != null && itemStack != ItemStack.EMPTY) {
+            resultStack.setNbt(itemStack.getNbt().copy());
+        }
+
+        return resultStack;
     }
 
     @Override
