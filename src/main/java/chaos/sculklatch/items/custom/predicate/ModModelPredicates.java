@@ -2,7 +2,7 @@ package chaos.sculklatch.items.custom.predicate;
 
 import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.items.ModItems;
-import chaos.sculklatch.items.custom.test.SculkBundleItem;
+import chaos.sculklatch.items.custom.SculkBundleItem;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.util.Identifier;
 

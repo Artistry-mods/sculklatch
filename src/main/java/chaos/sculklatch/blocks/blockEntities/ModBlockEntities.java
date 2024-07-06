@@ -2,7 +2,6 @@ package chaos.sculklatch.blocks.blockEntities;
 
 import chaos.sculklatch.blocks.ModBlocks;
 import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

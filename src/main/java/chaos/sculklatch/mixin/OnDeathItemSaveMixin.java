@@ -1,12 +1,8 @@
 package chaos.sculklatch.mixin;
 
 import chaos.sculklatch.items.ModItems;
-import chaos.sculklatch.items.custom.SculkBundleItem;
 import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import chaos.sculklatch.items.custom.components.custom.OverfilledBundleContentComponent;
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -38,8 +34,8 @@ public class OnDeathItemSaveMixin {
 
     @Unique
     private static void fillSculkBundles(ServerPlayerEntity player) {
-        int sculk_bundles = player.getInventory().count(ModItems.SCULK_BUNDLE);
-        if (sculk_bundles != 0) {
+        int sculk_bundle_count = player.getInventory().count(ModItems.SCULK_BUNDLE);
+        if (sculk_bundle_count != 0) {
             List<Integer> sculkBundleSlots = getSculkBundles(player.getInventory());
             for (Integer sculkBundleSlot : sculkBundleSlots) {
                 ItemStack sculkBundle = player.getInventory().getStack(sculkBundleSlot);

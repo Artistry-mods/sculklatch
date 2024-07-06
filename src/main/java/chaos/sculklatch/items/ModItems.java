@@ -5,7 +5,7 @@ import chaos.sculklatch.blocks.ModBlocks;
 import chaos.sculklatch.items.custom.AmethystBellItem;
 import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import chaos.sculklatch.items.custom.components.custom.OverfilledBundleContentComponent;
-import chaos.sculklatch.items.custom.test.SculkBundleItem;
+import chaos.sculklatch.items.custom.SculkBundleItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.DataComponentTypes;
