@@ -8,8 +8,8 @@
     "NoSculkBundleDespawnMixin",
     "OnDeathItemSaveMixin",
     "SculkJawPullEntitiesDownMixin",
-    "SculkSpreadMixin",
-    "SculkSpreadJawMixin"
+    "SculkSpreadJawMixin",
+    "SculkSpreadMixin"
   ],
   "injectors": {
     "defaultRequire": 1

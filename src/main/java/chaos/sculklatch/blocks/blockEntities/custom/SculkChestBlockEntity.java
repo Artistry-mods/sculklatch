@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -131,6 +132,30 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
         @Override
         public void accept(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
 
+        }
+
+        @Override
+        public boolean canAccept(RegistryEntry<GameEvent> gameEvent, GameEvent.Emitter emitter) {
+            if (!gameEvent.isIn(this.getTag())) {
+                return false;
+            } else {
+                Entity entity = emitter.sourceEntity();
+                if (entity != null) {
+                    if (entity.isSpectator()) {
+                        return false;
+                    }
+
+                    if (entity.occludeVibrationSignals()) {
+                        return false;
+                    }
+                }
+
+                if (emitter.affectedState() != null) {
+                    return !emitter.affectedState().isIn(BlockTags.DAMPENS_VIBRATIONS);
+                } else {
+                    return true;
+                }
+            }
         }
 
         public boolean triggersAvoidCriterion() {

@@ -26,7 +26,6 @@ public class OverfilledBundleContentComponent implements TooltipData {
     public static final PacketCodec<RegistryByteBuf, OverfilledBundleContentComponent> PACKET_CODEC;
     private static final Fraction NESTED_BUNDLE_OCCUPANCY;
     private static final int MAX_ITEMS = 32;  // Maximum number of items in the bundle
-    private static final int ADD_TO_NEW_SLOT = -1;
     final List<ItemStack> stacks;
     final Fraction occupancy;
 
@@ -107,12 +106,8 @@ public class OverfilledBundleContentComponent implements TooltipData {
     }
 
     static {
-        CODEC = ItemStack.CODEC.listOf().xmap(OverfilledBundleContentComponent::new, (component) -> {
-            return component.stacks;
-        });
-        PACKET_CODEC = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(OverfilledBundleContentComponent::new, (component) -> {
-            return component.stacks;
-        });
+        CODEC = ItemStack.CODEC.listOf().xmap(OverfilledBundleContentComponent::new, (component) -> component.stacks);
+        PACKET_CODEC = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(OverfilledBundleContentComponent::new, (component) -> component.stacks);
         NESTED_BUNDLE_OCCUPANCY = Fraction.getFraction(1, MAX_ITEMS);
     }
 
@@ -166,8 +161,8 @@ public class OverfilledBundleContentComponent implements TooltipData {
                         this.stacks.addFirst(stack.split(i));
                     }
                      */
-                    //System.out.println(stack.split(i));
-                    this.stacks.addFirst(stack.split(i));
+                    ItemStack spiltStack = stack.split(i);
+                    this.stacks.addFirst(spiltStack);
 
                     return i;
                 }
@@ -185,25 +180,10 @@ public class OverfilledBundleContentComponent implements TooltipData {
         }
 
         public void ejectAll(PlayerEntity player) {
-            if (this.stacks.isEmpty()) return;
-            /*
-            for (int i = 0; i < this.stacks.size(); i++) {
-                ItemStack stack = this.removeFirst();
-                System.out.println("ejecting: " + stack);
-                System.out.println("" + (stack == null || stack.isEmpty()));
-                if (stack == null || stack.isEmpty()) return;
-
-                player.getInventory().setStack(player.getInventory().getEmptySlot(), stack);
-            }
-            */
-
+            if (player.getWorld().isClient() || this.stacks.isEmpty()) return;
             for (ItemStack stack: this.stacks) {
-                /*
-                while (stack.getMaxCount() < stack.getCount()) {
-                    player.getInventory().setStack(player.getInventory().getEmptySlot(), stack.split(stack.getMaxCount()));
-                }
-                 */
-                player.getInventory().setStack(player.getInventory().getEmptySlot(), stack);
+
+                player.getInventory().insertStack(stack);
             }
 
             this.clear();
