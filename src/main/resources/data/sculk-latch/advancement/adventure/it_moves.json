@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:adventure/kill_mob_near_sculk_catalyst",
+  "criteria": {
+    "iron": {
+      "conditions": {
+        "items": [
+          {
+            "items": "sculk-latch:sculk_bundle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.adventure.it_moves.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "sculk-latch:sculk_bundle"
+    },
+    "title": {
+      "translate": "advancements.adventure.it_moves.title"
+    }
+  },
+  "sends_telemetry_event": true
+}

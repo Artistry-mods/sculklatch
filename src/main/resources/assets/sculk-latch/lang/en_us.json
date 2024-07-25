@@ -4,5 +4,8 @@
   "item.sculk-latch.amethyst_bell": "Amethyst Bell",
   "block.sculk-latch.sculk_jaw": "Sculk Jaw",
   "death.attack.sculk_jaw": "%1$s was eaten alive",
-  "death.attack.sculk_jaw.player": "%1$s was caught by a sculk jaw whilst trying to escape %2$s"
+  "death.attack.sculk_jaw.player": "%1$s was caught by a sculk jaw whilst trying to escape %2$s",
+
+  "advancements.adventure.it_moves.title": "It Moves!!!",
+  "advancements.adventure.it_moves.description": "Obtain a sculk latch bundle"
 }
