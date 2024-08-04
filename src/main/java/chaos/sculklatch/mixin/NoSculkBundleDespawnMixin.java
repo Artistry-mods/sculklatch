@@ -22,11 +22,24 @@ public abstract class NoSculkBundleDespawnMixin {
     @Shadow
     public abstract ItemStack getStack();
 
-    @Inject(at = @At("HEAD"), method = "tick")
-    public void onPlaced(CallbackInfo ci) {
-        if (this.getStack().getItem() instanceof SculkBundleItem && this.itemAge > 125) {
+    @Shadow public abstract int getItemAge();
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;discard()V", ordinal = 1, shift = At.Shift.BEFORE), cancellable = true)
+    public void onTick(CallbackInfo ci) {
+        if (this.getStack().getItem() instanceof SculkBundleItem) {
+            if (this.getItemAge() >= 7000) {
+                System.out.println("killing entity");
+                ((ItemEntity) (Object) this).discard();
+                ci.cancel();
+            }
             this.itemAge = 0;
+            ci.cancel();
         }
+    }
+
+    @Inject(at = @At("TAIL"), method = "setDespawnImmediately")
+    public void onSetDespawn(CallbackInfo ci) {
+        this.itemAge = 7000;
     }
 
     @Inject(at = @At("HEAD"), method = "damage", cancellable = true)

@@ -1,0 +1,8 @@
+{
+  "item.sculk-latch.sculk_latch": "Скалк-защелка",
+  "item.sculk-latch.sculk_bundle": "мешок с скалк-защелкой",
+  "item.sculk-latch.amethyst_bell": "Аметистовый колокол",
+  "block.sculk-latch.sculk_jaw": "Скалк-челюсть",
+  "death.attack.sculk_jaw": "%1$s был сьеден заживо",
+  "death.attack.sculk_jaw.player": "%1$s был пойман челюстями скалка, когда пытался сбежать %2$s"
+}
