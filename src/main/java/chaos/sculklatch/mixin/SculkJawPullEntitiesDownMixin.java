@@ -1,6 +1,8 @@
 package chaos.sculklatch.mixin;
 
 import chaos.sculklatch.blocks.ModBlocks;
+import chaos.sculklatch.blocks.custom.SculkJawBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +19,8 @@ public class SculkJawPullEntitiesDownMixin {
     public void tickMovement(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         if (!(livingEntity instanceof WardenEntity)) {
-            if (livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down()).getBlock() == ModBlocks.SCULK_JAW && !livingEntity.isSneaking()) {
+            BlockState jawState = livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down());
+            if (jawState.getBlock() == ModBlocks.SCULK_JAW && !livingEntity.isSneaking() && !jawState.get(SculkJawBlock.IS_SCARED)) {
                 if (livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).getAbilities().flying) {
                     return;
                 }
