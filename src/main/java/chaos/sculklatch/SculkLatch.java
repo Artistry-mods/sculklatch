@@ -1,6 +1,7 @@
 package chaos.sculklatch;
 
 import chaos.sculklatch.blocks.ModBlocks;
+import chaos.sculklatch.blocks.entities.ModBlockEntities;
 import chaos.sculklatch.commands.ModCommands;
 import chaos.sculklatch.game_event.ModGameEvents;
 import chaos.sculklatch.items.ModItems;
@@ -28,6 +29,7 @@ public class SculkLatch implements ModInitializer {
         ModBlocks.registerModItems();
         ModRecipes.registerModRecipes();
         ModGameEvents.registerModGameEvents();
+        ModBlockEntities.init();
 
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             ModCommands.registerModCommands();
