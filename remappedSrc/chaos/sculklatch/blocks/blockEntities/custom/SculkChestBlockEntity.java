@@ -1,7 +1,7 @@
-package chaos.sculklatch.blocks.blockEntities.custom;
+package chaos.sculklatch.blocks.entities.custom;
 
 import chaos.sculklatch.SculkLatch;
-import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
+import chaos.sculklatch.blocks.entities.ModBlockEntities;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
 import chaos.sculklatch.items.custom.AmethystBellItem;
 import net.minecraft.block.BlockState;

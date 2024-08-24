@@ -1,7 +1,7 @@
 package chaos.sculklatch;
 
 import chaos.sculklatch.blocks.ModBlocks;
-import chaos.sculklatch.gameevent.ModGameEvents;
+import chaos.sculklatch.game_event.ModGameEvents;
 import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.recipes.ModRecipes;
 import chaos.sculklatch.tags.ModTags;

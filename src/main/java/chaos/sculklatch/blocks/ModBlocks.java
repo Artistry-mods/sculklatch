@@ -1,7 +1,7 @@
 package chaos.sculklatch.blocks;
 
 import chaos.sculklatch.SculkLatch;
-import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
+import chaos.sculklatch.blocks.entities.ModBlockEntities;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
 import chaos.sculklatch.blocks.custom.SculkJawBlock;
 import net.minecraft.block.AbstractBlock;

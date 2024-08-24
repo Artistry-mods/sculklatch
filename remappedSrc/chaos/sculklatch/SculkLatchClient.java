@@ -1,7 +1,7 @@
 package chaos.sculklatch;
 
-import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
-import chaos.sculklatch.blocks.blockEntities.custom.renderers.SculkChestBlockEntityRenderer;
+import chaos.sculklatch.blocks.entities.ModBlockEntities;
+import chaos.sculklatch.blocks.entities.custom.renderers.SculkChestBlockEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 

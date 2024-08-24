@@ -1,7 +1,7 @@
-package chaos.sculklatch.blocks.blockEntities;
+package chaos.sculklatch.blocks.entities;
 
 import chaos.sculklatch.blocks.ModBlocks;
-import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
+import chaos.sculklatch.blocks.entities.custom.SculkChestBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

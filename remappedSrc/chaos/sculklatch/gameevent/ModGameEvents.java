@@ -1,4 +1,4 @@
-package chaos.sculklatch.gameevent;
+package chaos.sculklatch.game_event;
 
 import net.fabricmc.fabric.api.registry.SculkSensorFrequencyRegistry;
 import net.minecraft.registry.Registries;

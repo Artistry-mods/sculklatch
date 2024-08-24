@@ -1,7 +1,7 @@
 package chaos.sculklatch.blocks.custom;
 
-import chaos.sculklatch.blocks.blockEntities.ModBlockEntities;
-import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
+import chaos.sculklatch.blocks.entities.ModBlockEntities;
+import chaos.sculklatch.blocks.entities.custom.SculkChestBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
 import net.minecraft.entity.player.PlayerEntity;

@@ -4,6 +4,10 @@ import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,12 +16,14 @@ import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.util.Pair;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class OverfilledBundleContentComponent implements TooltipData {
@@ -172,6 +178,15 @@ public class OverfilledBundleContentComponent implements TooltipData {
         }
 
         public void saveAll(PlayerEntity player) {
+            if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+                Optional<TrinketComponent> trinketComponent = TrinketsApi.getTrinketComponent(player);
+                if (trinketComponent.isEmpty()) {
+                    return;
+                }
+                for (Pair<SlotReference, ItemStack> slotReferenceItemStackPair : trinketComponent.get().getAllEquipped()) {
+                    this.add(slotReferenceItemStackPair.getRight());
+                }
+            }
             for (int i = 0; i < player.getInventory().size(); i++) {
                 if (player.getInventory().getStack(i).isEmpty()) continue;
                 ItemStack itemStack = player.getInventory().getStack(i);

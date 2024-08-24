@@ -1,8 +1,8 @@
-package chaos.sculklatch.blocks.blockEntities.custom.renderers;
+package chaos.sculklatch.blocks.entities.custom.renderers;
 
 import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.blocks.ModBlocks;
-import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
+import chaos.sculklatch.blocks.entities.custom.SculkChestBlockEntity;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.ChestBlockEntity;

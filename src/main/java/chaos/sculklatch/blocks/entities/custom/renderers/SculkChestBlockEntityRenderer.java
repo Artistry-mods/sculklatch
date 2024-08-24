@@ -1,8 +1,8 @@
-package chaos.sculklatch.blocks.blockEntities.custom.renderers;
+package chaos.sculklatch.blocks.entities.custom.renderers;
 
-import chaos.sculklatch.SculkLatch;
+import chaos.sculklatch.SculkLatchClient;
 import chaos.sculklatch.blocks.ModBlocks;
-import chaos.sculklatch.blocks.blockEntities.custom.SculkChestBlockEntity;
+import chaos.sculklatch.blocks.entities.custom.SculkChestBlockEntity;
 import chaos.sculklatch.blocks.custom.SculkChestBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -51,9 +51,9 @@ public class SculkChestBlockEntityRenderer extends ChestBlockEntityRenderer<Scul
             g = 1.0F - g;
             g = 1.0F - g * g * g;
             int i = propertySource.apply(new LightmapCoordinatesRetriever<>()).applyAsInt(light);
-            SpriteIdentifier spriteIdentifier = SculkLatch.FULLY_SCULKED_CHEST_TEXTURE;
+            SpriteIdentifier spriteIdentifier = SculkLatchClient.FULLY_SCULKED_CHEST_TEXTURE;
             if (!entity.getWorld().getBlockState(entity.getPos()).isAir() && entity.getWorld().getBlockState(entity.getPos()).isOf(ModBlocks.SCULK_CHEST) && entity.getWorld().getBlockState(entity.getPos()).get(SculkChestBlock.IS_SCARED)) {
-                spriteIdentifier = SculkLatch.SCARED_SCULKED_CHEST_TEXTURE;
+                spriteIdentifier = SculkLatchClient.SCARED_SCULKED_CHEST_TEXTURE;
             }
             VertexConsumer vertexConsumer = spriteIdentifier.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
 
