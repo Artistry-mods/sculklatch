@@ -1,0 +1,11 @@
+{
+  "item.sculk-latch.sculk_latch": "Скалкова клямка",
+  "item.sculk-latch.sculk_bundle": "Мішечок зі скалковою клямкою",
+  "item.sculk-latch.amethyst_bell": "Аметистовий дзвін",
+  "block.sculk-latch.sculk_jaw": "Скалкова паща",
+  "death.attack.sculk_jaw": "%1$s було з'їдено живцем",
+  "death.attack.sculk_jaw.player": "%1$s було з'їдено живцем під час спроби втекти від %2$s",
+
+  "advancements.adventure.it_moves.title": "Воно рухається!!!",
+  "advancements.adventure.it_moves.description": "Отримайте мішечок зі скалковою клямкою"
+}
