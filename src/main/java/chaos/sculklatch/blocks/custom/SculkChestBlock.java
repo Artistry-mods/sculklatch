@@ -29,8 +29,8 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider, 
     public static final BooleanProperty IS_SCARED = BooleanProperty.of("is_scared");
     private ServerPlayerEntity lastPlayerToOpen;
 
-    public SculkChestBlock(Settings settings, Supplier<BlockEntityType<? extends ChestBlockEntity>> blockEntityTypeSupplier) {
-        super(settings, blockEntityTypeSupplier);
+    public SculkChestBlock(Supplier<BlockEntityType<? extends ChestBlockEntity>> blockEntityTypeSupplier, Settings settings) {
+        super(blockEntityTypeSupplier, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(IS_SCARED, false).with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 
@@ -59,8 +59,7 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider, 
         }
     }
 
-    @Override
-    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
+    public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state, boolean includeData) {
         return Items.CHEST.getDefaultStack();
     }
 

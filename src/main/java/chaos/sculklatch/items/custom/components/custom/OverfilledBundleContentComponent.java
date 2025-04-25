@@ -1,15 +1,16 @@
 package chaos.sculklatch.items.custom.components.custom;
 
+import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
-import net.fabricmc.loader.api.FabricLoader;
+//import dev.emi.trinkets.api.SlotReference;
+//import dev.emi.trinkets.api.TrinketComponent;
+//import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BeesComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipData;
@@ -56,12 +57,12 @@ public class OverfilledBundleContentComponent implements TooltipData {
     }
 
     static Fraction getOccupancy(ItemStack stack) {
-        OverfilledBundleContentComponent bundleContentsComponent = stack.get(ModDataComponentTypes.OVERFILLED_BUNDLE_CONTENTS);
-        if (bundleContentsComponent != null) {
-            return NESTED_BUNDLE_OCCUPANCY.add(bundleContentsComponent.getOccupancy());
+        OverfilledBundleContentComponent overfilledBundleContentsComponent = stack.get(ModDataComponentTypes.OVERFILLED_BUNDLE_CONTENTS);
+        if (overfilledBundleContentsComponent != null) {
+            return NESTED_BUNDLE_OCCUPANCY.add(overfilledBundleContentsComponent.getOccupancy());
         } else {
-            List<BeehiveBlockEntity.BeeData> list = stack.getOrDefault(DataComponentTypes.BEES, List.of());
-            return !list.isEmpty() ? Fraction.ONE : Fraction.getFraction(1, stack.getMaxCount() * 10);
+            List<BeehiveBlockEntity.BeeData> list = (stack.getOrDefault(DataComponentTypes.BEES, BeesComponent.DEFAULT)).bees();
+            return !list.isEmpty() ? Fraction.ONE : Fraction.getFraction(1, stack.getMaxCount() * 10); // muahahahahahahhhh higher capacity size upon ye
         }
     }
 
@@ -178,20 +179,20 @@ public class OverfilledBundleContentComponent implements TooltipData {
         }
 
         public void saveAll(PlayerEntity player) {
-            if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            for (int i = 0; i < player.getInventory().size(); i++) {
+                ItemStack slotStack = player.getInventory().getStack(i);
+                if (slotStack.isEmpty()) continue;
+                this.add(slotStack);
+            }
+            /*if (SculkLatch.isTrinketsLoaded) {
                 Optional<TrinketComponent> trinketComponent = TrinketsApi.getTrinketComponent(player);
                 if (trinketComponent.isEmpty()) {
                     return;
-                }
+                } // TODO: when trinkets compat gets reimplemented, make sure to account for a TrinketItem's drop rules
                 for (Pair<SlotReference, ItemStack> slotReferenceItemStackPair : trinketComponent.get().getAllEquipped()) {
                     this.add(slotReferenceItemStackPair.getRight());
                 }
-            }
-            for (int i = 0; i < player.getInventory().size(); i++) {
-                if (player.getInventory().getStack(i).isEmpty()) continue;
-                ItemStack itemStack = player.getInventory().getStack(i);
-                this.add(itemStack);
-            }
+            }*/
         }
 
         public void ejectAll(PlayerEntity player) {

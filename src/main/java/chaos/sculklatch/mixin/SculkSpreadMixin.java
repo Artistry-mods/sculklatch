@@ -24,7 +24,7 @@ import static net.minecraft.block.ChestBlock.FACING;
 
 
 @Mixin(SculkBlock.class)
-public class SculkSpreadMixin {
+public abstract class SculkSpreadMixin {
 
     @Unique
     private static final Map<Integer, Direction> FACING_MAP = new HashMap<>(Map.of(0, Direction.NORTH, 1, Direction.EAST, 2, Direction.SOUTH, 3, Direction.WEST));
@@ -44,8 +44,10 @@ public class SculkSpreadMixin {
         return null;
     }
 
+
+
     @Inject(at = @At("HEAD"), method = "spread", cancellable = true)
-    public void spread(SculkSpreadManager.Cursor cursor, WorldAccess world, BlockPos catalystPos, Random random, SculkSpreadManager spreadManager, boolean shouldConvertToBlock, CallbackInfoReturnable<Integer> cir) {
+    public void sculkLatch$spreadSculkJaw(SculkSpreadManager.Cursor cursor, WorldAccess world, BlockPos catalystPos, Random random, SculkSpreadManager spreadManager, boolean shouldConvertToBlock, CallbackInfoReturnable<Integer> cir) {
         int cursorCharge = cursor.getCharge();
         BlockPos blockPos = cursor.getPos();
         BlockPos raisedBlockPos = blockPos.up();

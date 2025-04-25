@@ -4,8 +4,10 @@ import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.damagetype.ModDamageSources;
 import chaos.sculklatch.tags.ModTags;
 import net.minecraft.block.*;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -14,20 +16,17 @@ import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -36,7 +35,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
 public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
-    public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty IS_SCARED = BooleanProperty.of("is_scared");
     public static final BooleanProperty IS_EATING = BooleanProperty.of("is_eating");
     public static final IntProperty HEALTH = IntProperty.of("health", 0, SculkLatch.SCULK_JAW_HEALTH);
@@ -82,20 +81,22 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
         if (entity instanceof LivingEntity && !state.get(IS_SCARED) && !(entity.getType().isIn(ModTags.SCULK_JAW_IMMUNE))) {
             if (entity instanceof PlayerEntity && ((PlayerEntity) entity).getAbilities().flying) {
                 return;
             }
             entity.setSneaking(false);
-            entity.damage(world.getDamageSources().create(ModDamageSources.SCULK_JAW), 1.0F);
+            if (world instanceof ServerWorld serverWorld) {
+                entity.damage(serverWorld, world.getDamageSources().create(ModDamageSources.SCULK_JAW), 1.0F);
+            }
             entity.addVelocity(pos.toCenterPos().add(0, -0.3, 0).subtract(entity.getPos()).multiply(0.3));
             entity.slowMovement(state, new Vec3d(0.5, 0.6, 0.5));
         }
     }
 
     @Override
-    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+    public VoxelShape getCullingShape(BlockState state) {
         return VoxelShapes.empty();
     }
 
@@ -136,7 +137,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
         if (player.getWorld().isClient()) {
             return;
         }
-        float f = (float) player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        float f = (float) player.getAttributeValue(EntityAttributes.ATTACK_DAMAGE);
 
         float g = EnchantmentHelper.getDamage((ServerWorld) player.getWorld(), player.getWeaponStack(), new WardenEntity(EntityType.WARDEN, player.getWorld()), player.getDamageSources().playerAttack(player), f);
         float h = player.getAttackCooldownProgress(0.5F);
@@ -154,16 +155,17 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
 
             f += g;
             boolean bl4 = false;
-            double d = player.horizontalSpeed - player.prevHorizontalSpeed;
+            double d = player.getMovement().horizontalLengthSquared();
+            double e = player.getMovementSpeed() * 2.5;
             if (bl && !bl3 && !bl2 && player.isOnGround() && d < (double) player.getMovementSpeed()) {
                 ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
-                if (itemStack.getItem() instanceof SwordItem) {
+                if (d < MathHelper.square(e) && player.getStackInHand(Hand.MAIN_HAND).isIn(ItemTags.SWORDS)) {
                     bl4 = true;
                 }
             }
 
             if (bl4) {
-                float l = 1.0F + (float)player.getAttributeValue(EntityAttributes.PLAYER_SWEEPING_DAMAGE_RATIO) * f;
+                float l = 1.0F + (float)player.getAttributeValue(EntityAttributes.SWEEPING_DAMAGE_RATIO) * f;
 
                 player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
                 player.spawnSweepAttackParticles();

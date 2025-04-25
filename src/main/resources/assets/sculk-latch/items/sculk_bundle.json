@@ -1,0 +1,54 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:condition",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "sculk-latch:item/sculk_bundle"
+          },
+          "on_true": {
+            "type": "minecraft:composite",
+            "models": [
+              {
+                "type": "minecraft:model",
+                "model": "minecraft:item/bundle_open_back"
+              },
+              {
+                "type": "minecraft:bundle/selected_item"
+              },
+              {
+                "type": "minecraft:model",
+                "model": "sculk-latch:item/sculk_bundle_open_front"
+              }
+            ]
+          },
+          "property": "minecraft:bundle/has_selected_item"
+        },
+        "when": "gui"
+      },
+      {
+        "model": {
+          "type": "minecraft:condition",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "sculk-latch:item/sculk_bundle"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "sculk-latch:item/sculk_bundle_over_filled"
+          },
+          "property": "sculk-latch:sculk_bundle/is_overfilled"
+        },
+        "when": "ground"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "sculk-latch:item/sculk_bundle"
+    },
+    "property": "minecraft:display_context"
+  }
+}

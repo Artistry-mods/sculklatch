@@ -13,17 +13,16 @@ import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
-public class SculkBudelRecipe extends SpecialCraftingRecipe {
-    public SculkBudelRecipe(CraftingRecipeCategory category) {
+public class SculkBundleRecipe extends SpecialCraftingRecipe {
+    public SculkBundleRecipe(CraftingRecipeCategory category) {
         super(category);
     }
-
 
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
         int sculkLatchCount = 0;
         int bundles = 0;
-        for(int k = 0; k < input.getSize(); ++k) {
+        for(int k = 0; k < input.getStackCount(); ++k) {
             ItemStack itemStack = input.getStackInSlot(k);
             if (!itemStack.isEmpty()) {
                 if (itemStack.getItem() == ModItems.SCULK_LATCH) {
@@ -41,7 +40,7 @@ public class SculkBudelRecipe extends SpecialCraftingRecipe {
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         ItemStack itemStack = ItemStack.EMPTY;
 
-        for(int i = 0; i < input.getSize(); ++i) {
+        for(int i = 0; i < input.getStackCount(); ++i) {
             ItemStack itemStack2 = input.getStackInSlot(i);
             if (!itemStack2.isEmpty()) {
                 Item item = itemStack2.getItem();
@@ -55,12 +54,7 @@ public class SculkBudelRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public boolean fits(int width, int height) {
-        return width * height >= 2;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.SCULK_LATCH_BUNDEL;
+    public RecipeSerializer<? extends SculkBundleRecipe> getSerializer() {
+        return ModRecipes.SCULK_LATCH_BUNDLE;
     }
 }

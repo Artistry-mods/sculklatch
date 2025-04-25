@@ -18,6 +18,7 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class SculkChestBlockEntityRenderer extends ChestBlockEntityRenderer<SculkChestBlockEntity> {
@@ -33,21 +34,21 @@ public class SculkChestBlockEntityRenderer extends ChestBlockEntityRenderer<Scul
         this.singleChestLatch = modelPart.getChild("lock");
     }
 
-    @Override
-    public void render(SculkChestBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(SculkChestBlockEntity entity, float tickProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, Vec3d cameraPos) {
         World world = entity.getWorld();
         boolean bl = world != null;
         BlockState blockState = bl ? entity.getCachedState() : Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH);
         Block block = blockState.getBlock();
         if (block instanceof AbstractChestBlock<?> abstractChestBlock) {
             matrices.push();
-            float f = blockState.get(ChestBlock.FACING).asRotation();
+            //float f = blockState.get(ChestBlock.FACING).asRotation();
+            float f = blockState.get(ChestBlock.FACING).getPositiveHorizontalDegrees();
             matrices.translate(0.5F, 0.5F, 0.5F);
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-f));
             matrices.translate(-0.5F, -0.5F, -0.5F);
             DoubleBlockProperties.PropertySource<? extends ChestBlockEntity> propertySource = abstractChestBlock.getBlockEntitySource(blockState, world, entity.getPos(), true);
 
-            float g = propertySource.apply(ChestBlock.getAnimationProgressRetriever(entity)).get(tickDelta);
+            float g = propertySource.apply(ChestBlock.getAnimationProgressRetriever(entity)).get(tickProgress);
             g = 1.0F - g;
             g = 1.0F - g * g * g;
             int i = propertySource.apply(new LightmapCoordinatesRetriever<>()).applyAsInt(light);

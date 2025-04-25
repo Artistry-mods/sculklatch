@@ -16,6 +16,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.BlockPositionSource;
@@ -108,16 +109,17 @@ public class SculkChestBlockEntity extends ChestBlockEntity implements GameEvent
 
         @Override
         public boolean accepts(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter) {
-            if (Objects.equals(event, ModGameEvents.AMETHYST_BELL_HIT) && emitter != null && emitter.sourceEntity() instanceof LivingEntity) {
-                for (ItemStack itemStack : ((LivingEntity) emitter.sourceEntity()).getHandItems()) {
-                    if (itemStack.getItem() instanceof AmethystBellItem) {
+            if (Objects.equals(event, ModGameEvents.AMETHYST_BELL_HIT) && emitter != null && emitter.sourceEntity() instanceof LivingEntity livingEntity) {
+                for(Hand hand : Hand.values()) {
+                    ItemStack handStack = livingEntity.getStackInHand(hand);
+                    if (handStack.getItem() instanceof AmethystBellItem) {
                         if (!SculkChestBlockEntity.this.hasCustomName()) {
                             world.setBlockState(this.pos, world.getBlockState(this.pos).with(SculkChestBlock.IS_SCARED, true));
                             world.playSound(null, this.pos, SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK, SoundCategory.BLOCKS, 1F, 1.2F);
                             SculkChestBlockEntity.this.scaredTimer = SculkLatch.SCARED_TIMER;
                             return (!pos.equals(this.pos) || event != GameEvent.BLOCK_DESTROY && event != GameEvent.BLOCK_PLACE);
                         }
-                        if (Objects.equals(Objects.requireNonNull(SculkChestBlockEntity.this.getCustomName()).getString(), itemStack.getName().getString())) {
+                        if (Objects.equals(Objects.requireNonNull(SculkChestBlockEntity.this.getCustomName()).getString(), handStack.getName().getString())) {
                             world.setBlockState(this.pos, world.getBlockState(this.pos).with(SculkChestBlock.IS_SCARED, true));
                             world.playSound(null, this.pos, SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK, SoundCategory.BLOCKS, 1F, 1.2F);
                             SculkChestBlockEntity.this.scaredTimer = 40;

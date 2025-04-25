@@ -2,9 +2,10 @@ package chaos.sculklatch;
 
 import chaos.sculklatch.blocks.entities.ModBlockEntities;
 import chaos.sculklatch.blocks.entities.custom.renderers.SculkChestBlockEntityRenderer;
-import chaos.sculklatch.items.custom.predicate.ModModelPredicates;
+import chaos.sculklatch.items.custom.predicate.OverfilledBundleProperty;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.item.property.bool.BooleanProperties;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 
@@ -14,7 +15,7 @@ public class SculkLatchClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ModModelPredicates.registerModModelPredicates();
         BlockEntityRendererFactories.register(ModBlockEntities.SCULK_CHEST_BLOCK_ENTITY_TYPE, SculkChestBlockEntityRenderer::new);
+        BooleanProperties.ID_MAPPER.put(Identifier.of(SculkLatch.MOD_ID, "sculk_bundle/is_overfilled"), OverfilledBundleProperty.CODEC);
     }
 }

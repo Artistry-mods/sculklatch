@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
-public class SculkJawPullEntitiesDownMixin {
+public abstract class SculkJawPullEntitiesDownMixin {
 
     @Inject(at = @At("TAIL"), method = "tickMovement")
-    public void tickMovement(CallbackInfo ci) {
+    public void sculkLatch$sculkJawSlowsMovement(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         if (!(livingEntity instanceof WardenEntity)) {
             BlockState jawState = livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down());

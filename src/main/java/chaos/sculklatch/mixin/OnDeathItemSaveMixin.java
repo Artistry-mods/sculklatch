@@ -7,6 +7,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ServerPlayerEntity.class)
-public class OnDeathItemSaveMixin {
+public abstract class OnDeathItemSaveMixin {
 
     @Unique
     private static List<Integer> getSculkBundles(Inventory inventory) {
@@ -49,9 +50,12 @@ public class OnDeathItemSaveMixin {
     }
 
     @Inject(at = @At("HEAD"), method = "onDeath")
-    public void onDeath(DamageSource damageSource, CallbackInfo ci) {
+    public void sculkLatch$fillSculkBundlesOnDeath(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayerEntity entity = (ServerPlayerEntity) (Object) this;
-        if (!entity.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) {
+            return;
+        }
+        if (!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !entity.isSpectator()) {
             fillSculkBundles(entity);
         }
     }

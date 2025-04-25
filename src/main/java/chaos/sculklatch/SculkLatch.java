@@ -5,6 +5,7 @@ import chaos.sculklatch.blocks.entities.ModBlockEntities;
 import chaos.sculklatch.commands.ModCommands;
 import chaos.sculklatch.game_event.ModGameEvents;
 import chaos.sculklatch.items.ModItems;
+import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import chaos.sculklatch.recipes.ModRecipes;
 import chaos.sculklatch.tags.ModTags;
 import net.fabricmc.api.ModInitializer;
@@ -22,6 +23,8 @@ public class SculkLatch implements ModInitializer {
     public static final int SCULK_JAW_PLACE_TRIES = 10; // the amount of tries the program gets to place the jaw
     public static final int SCULK_JAW_HEALTH = 30; // The health for the sculk jaw
 
+    public static boolean isTrinketsLoaded = false; // cached because calling isModLoaded every time is a tiny bit expensive
+
     @Override
     public void onInitialize() {
         ModTags.registerModTags();
@@ -29,11 +32,14 @@ public class SculkLatch implements ModInitializer {
         ModBlocks.registerModItems();
         ModRecipes.registerModRecipes();
         ModGameEvents.registerModGameEvents();
-        ModBlockEntities.init();
+        ModBlockEntities.registerModBlockEntities();
+        ModDataComponentTypes.registerModDataComponentTypes();
 
+        isTrinketsLoaded = FabricLoader.getInstance().isModLoaded("trinkets");
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             ModCommands.registerModCommands();
         }
+
 
         LOGGER.info("Hello Sculky world");
     }
