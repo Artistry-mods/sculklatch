@@ -1,6 +1,5 @@
 package chaos.sculklatch.items.custom.components.custom;
 
-import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import com.google.common.collect.Lists;
@@ -11,20 +10,19 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BeesComponent;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.Pair;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class OverfilledBundleContentComponent implements TooltipData {
@@ -199,7 +197,9 @@ public class OverfilledBundleContentComponent implements TooltipData {
             if (player.getWorld().isClient() || this.stacks.isEmpty()) return;
             for (ItemStack stack: this.stacks) {
 
-                player.getInventory().insertStack(stack);
+                if (!player.getInventory().insertStack(stack)) {
+                    player.getWorld().spawnEntity(new ItemEntity(player.getWorld(), player.getX(), player.getY(), player.getZ(), stack));
+                }
             }
 
             this.clear();
