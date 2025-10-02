@@ -1,5 +1,6 @@
 package chaos.sculklatch.items.custom.components.custom;
 
+import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.items.ModItems;
 import chaos.sculklatch.items.custom.components.ModDataComponentTypes;
 import com.google.common.collect.Lists;
@@ -7,6 +8,9 @@ import com.mojang.serialization.Codec;
 //import dev.emi.trinkets.api.SlotReference;
 //import dev.emi.trinkets.api.TrinketComponent;
 //import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.block.entity.BeehiveBlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BeesComponent;
@@ -17,12 +21,11 @@ import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.util.Pair;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class OverfilledBundleContentComponent implements TooltipData {
@@ -177,20 +180,38 @@ public class OverfilledBundleContentComponent implements TooltipData {
         }
 
         public void saveAll(PlayerEntity player) {
+            List<ItemStack> itemStacks = new ArrayList<>();
             for (int i = 0; i < player.getInventory().size(); i++) {
                 ItemStack slotStack = player.getInventory().getStack(i);
                 if (slotStack.isEmpty()) continue;
-                this.add(slotStack);
+                itemStacks.add(slotStack);
             }
-            /*if (SculkLatch.isTrinketsLoaded) {
+
+            if (SculkLatch.isTrinketsLoaded) {
                 Optional<TrinketComponent> trinketComponent = TrinketsApi.getTrinketComponent(player);
                 if (trinketComponent.isEmpty()) {
                     return;
-                } // TODO: when trinkets compat gets reimplemented, make sure to account for a TrinketItem's drop rules
-                for (Pair<SlotReference, ItemStack> slotReferenceItemStackPair : trinketComponent.get().getAllEquipped()) {
-                    this.add(slotReferenceItemStackPair.getRight());
                 }
-            }*/
+                for (Pair<SlotReference, ItemStack> slotReferenceItemStackPair : trinketComponent.get().getAllEquipped()) {
+                    itemStacks.add(slotReferenceItemStackPair.getRight());
+                }
+            }
+
+            // Sort for rarity
+            itemStacks.sort(Comparator.comparing((stack) -> stack.getRarity().ordinal() - 3));
+
+            // Sort for named items
+            itemStacks.sort((stack, stack2) -> stack.getName() != stack.getItemName() ? 1 : (stack2.getName() != stack2.getItemName() ? -1 : 0));
+
+            // Sort for enchantments
+            itemStacks.sort(Comparator.comparingInt(stack -> stack.getEnchantments().getEnchantments().size()));
+
+
+
+            for (ItemStack itemStack : itemStacks.reversed()) {
+                this.add(itemStack);
+            }
+
         }
 
         public void ejectAll(PlayerEntity player) {
