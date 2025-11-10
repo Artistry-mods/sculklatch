@@ -215,11 +215,11 @@ public class OverfilledBundleContentComponent implements TooltipData {
         }
 
         public void ejectAll(PlayerEntity player) {
-            if (player.getWorld().isClient() || this.stacks.isEmpty()) return;
+            if (player.getEntityWorld().isClient() || this.stacks.isEmpty()) return;
             for (ItemStack stack: this.stacks) {
 
                 if (!player.getInventory().insertStack(stack)) {
-                    player.getWorld().spawnEntity(new ItemEntity(player.getWorld(), player.getX(), player.getY(), player.getZ(), stack));
+                    player.getEntityWorld().spawnEntity(new ItemEntity(player.getEntityWorld(), player.getX(), player.getY(), player.getZ(), stack));
                 }
             }
 

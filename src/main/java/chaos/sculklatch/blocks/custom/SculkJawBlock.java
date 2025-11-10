@@ -4,7 +4,6 @@ import chaos.sculklatch.SculkLatch;
 import chaos.sculklatch.damagetype.ModDamageSources;
 import chaos.sculklatch.tags.ModTags;
 import net.minecraft.block.*;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCollisionHandler;
@@ -81,7 +80,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean bl) {
         if (entity instanceof LivingEntity && !state.get(IS_SCARED) && !(entity.getType().isIn(ModTags.SCULK_JAW_IMMUNE))) {
             if (entity instanceof PlayerEntity && ((PlayerEntity) entity).getAbilities().flying) {
                 return;
@@ -90,7 +89,7 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
             if (world instanceof ServerWorld serverWorld) {
                 entity.damage(serverWorld, world.getDamageSources().create(ModDamageSources.SCULK_JAW), 1.0F);
             }
-            entity.addVelocity(pos.toCenterPos().add(0, -0.3, 0).subtract(entity.getPos()).multiply(0.3));
+            entity.addVelocity(pos.toCenterPos().add(0, -0.3, 0).subtract(entity.getEntityPos()).multiply(0.3));
             entity.slowMovement(state, new Vec3d(0.5, 0.6, 0.5));
         }
     }
@@ -134,12 +133,12 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
     }
 
     public void damageSculkJaw(PlayerEntity player, BlockPos pos, BlockState state) {
-        if (player.getWorld().isClient()) {
+        if (player.getEntityWorld().isClient()) {
             return;
         }
         float f = (float) player.getAttributeValue(EntityAttributes.ATTACK_DAMAGE);
 
-        float g = EnchantmentHelper.getDamage((ServerWorld) player.getWorld(), player.getWeaponStack(), new WardenEntity(EntityType.WARDEN, player.getWorld()), player.getDamageSources().playerAttack(player), f);
+        float g = EnchantmentHelper.getDamage((ServerWorld) player.getEntityWorld(), player.getWeaponStack(), new WardenEntity(EntityType.WARDEN, player.getEntityWorld()), player.getDamageSources().playerAttack(player), f);
         float h = player.getAttackCooldownProgress(0.5F);
         f *= 0.2F + h * h * 0.8F;
         g *= h;
@@ -167,33 +166,33 @@ public class SculkJawBlock extends SculkBlock implements SculkSpreadable {
             if (bl4) {
                 float l = 1.0F + (float)player.getAttributeValue(EntityAttributes.SWEEPING_DAMAGE_RATIO) * f;
 
-                player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+                player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
                 player.spawnSweepAttackParticles();
 
 
                 if (player.squaredDistanceTo(pos.toCenterPos()) < 9.0) {
-                    player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) l * 5))));
+                    player.getEntityWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) l * 5))));
                 }
             }
 
             if (bl3) {
-                player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
+                player.getEntityWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
+                player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0F, 1.0F);
             }
 
             if (!bl3 && !bl4) {
-                player.getWorld().emitGameEvent(GameEvent.ENTITY_DAMAGE, pos, new GameEvent.Emitter(player, null));
+                player.getEntityWorld().emitGameEvent(GameEvent.ENTITY_DAMAGE, pos, new GameEvent.Emitter(player, null));
                 if (bl) {
-                    player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                    player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
+                    player.getEntityWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
+                    player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
                 } else {
-                    player.getWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
-                    player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
+                    player.getEntityWorld().setBlockState(pos, state.with(HEALTH, Math.max(0, state.get(HEALTH) - ((int) f))));
+                    player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, player.getSoundCategory(), 1.0F, 1.0F);
                 }
             }
 
-            if (!player.getWorld().isClient) {
-                ((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, pos.getX(), pos.getY(), pos.getZ(), (int) f, 0.1, 0.0, 0.1, 0.2);
+            if (!player.getEntityWorld().isClient()) {
+                ((ServerWorld) player.getEntityWorld()).spawnParticles(ParticleTypes.DAMAGE_INDICATOR, pos.getX(), pos.getY(), pos.getZ(), (int) f, 0.1, 0.0, 0.1, 0.2);
             }
 
             player.addExhaustion(0.1F);

@@ -19,13 +19,13 @@ public abstract class SculkJawPullEntitiesDownMixin {
     public void sculkLatch$sculkJawSlowsMovement(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         if (!(livingEntity instanceof WardenEntity)) {
-            BlockState jawState = livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down());
+            BlockState jawState = livingEntity.getEntityWorld().getBlockState(livingEntity.getBlockPos().down());
             if (jawState.getBlock() == ModBlocks.SCULK_JAW && !livingEntity.isSneaking() && !jawState.get(SculkJawBlock.IS_SCARED)) {
                 if (livingEntity instanceof PlayerEntity && ((PlayerEntity) livingEntity).getAbilities().flying) {
                     return;
                 }
-                livingEntity.addVelocity(livingEntity.getBlockPos().down().toCenterPos().add(0, -0.3, 0).subtract(livingEntity.getPos()).multiply(0.3));
-                livingEntity.slowMovement(livingEntity.getWorld().getBlockState(livingEntity.getBlockPos().down()), new Vec3d(0.5, 1, 0.5));
+                livingEntity.addVelocity(livingEntity.getBlockPos().down().toCenterPos().add(0, -0.3, 0).subtract(livingEntity.getEntityPos()).multiply(0.3));
+                livingEntity.slowMovement(livingEntity.getEntityWorld().getBlockState(livingEntity.getBlockPos().down()), new Vec3d(0.5, 1, 0.5));
             }
         }
     }

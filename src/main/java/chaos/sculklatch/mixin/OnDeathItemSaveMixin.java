@@ -52,7 +52,7 @@ public abstract class OnDeathItemSaveMixin {
     @Inject(at = @At("HEAD"), method = "onDeath")
     public void sculkLatch$fillSculkBundlesOnDeath(DamageSource damageSource, CallbackInfo ci) {
         ServerPlayerEntity entity = (ServerPlayerEntity) (Object) this;
-        if (!(entity.getWorld() instanceof ServerWorld serverWorld)) {
+        if (!(entity.getEntityWorld() instanceof ServerWorld serverWorld)) {
             return;
         }
         if (!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !entity.isSpectator()) {

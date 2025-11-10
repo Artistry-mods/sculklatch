@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -30,7 +31,7 @@ public class SculkChestBlock extends ChestBlock implements BlockEntityProvider, 
     private ServerPlayerEntity lastPlayerToOpen;
 
     public SculkChestBlock(Supplier<BlockEntityType<? extends ChestBlockEntity>> blockEntityTypeSupplier, Settings settings) {
-        super(blockEntityTypeSupplier, settings);
+        super(blockEntityTypeSupplier, SoundEvents.BLOCK_CHEST_OPEN, SoundEvents.BLOCK_CHEST_CLOSE, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(IS_SCARED, false).with(FACING, Direction.NORTH).with(WATERLOGGED, false));
     }
 
